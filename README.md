@@ -11,13 +11,13 @@
 | Где QR | Экран | Ссылка |
 |---|---|---|
 | Коробка, начало | Приветствие агента А. | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#start |
-| 01 · Кухня | Кухня улик: отметить подозрительные предметы | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#kitchen |
-| 02 · Гостиная | Сейф агентства и досье сестры | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#safe |
-| 03 · Прихожая | Следы у двери: выбрать след Ричи | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#steps |
-| 04 · Кабинет | Детектор правды, обвинение, арест | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#detector |
+| 01 · Кухня | Кухня улик: найти 3 следа | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#kitchen |
+| 02 · Гостиная | Алиби сестры: 2 вопроса маме и проверка детектором | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#alibi |
+| 03 · Прихожая | След Ричи | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#steps |
+| 04 · Кабинет | Детектор, обвинение, арест, затем сейф и награда | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#detector |
 | Удостоверение | Награда | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#award |
 
-Код сейфа: Б → В → А. Старая ссылка `#final` тоже ведёт на сейф.
+Сейф открывается в финале, после ареста. Код Б → В → А: порядок маминых фраз от отговорки до признания, фразы показаны прямо на странице сейфа. Старая ссылка `#final` ведёт на сейф.
 
 Видео агента: положи `agent-hello.mp4` и `agent-final.mp4` в `case-001/video/`. Пока файлов нет, на экранах показывается текст.
 
