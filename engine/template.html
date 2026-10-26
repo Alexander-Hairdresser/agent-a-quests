@@ -207,10 +207,46 @@ h2{font-size:clamp(24px,7vw,32px)}
 @keyframes toon-in{0%{transform:translateY(120%) scale(.4) rotate(-18deg)}55%{transform:translateY(-6%) scale(1.06) rotate(4deg)}75%{transform:translateY(2%) scale(.98) rotate(-2deg)}100%{transform:none}}
 @keyframes toon-out{to{transform:translateY(130%) scale(.6) rotate(12deg);opacity:0}}
 
+/* комнаты: кухня, прихожая, досье */
+.items{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.item{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px 10px;border-radius:14px;background:#FFFBF1;border:2px solid var(--choc);box-shadow:0 4px 0 var(--kraft);transition:transform .12s}
+.item:active{transform:translateY(2px)}
+.item svg{width:64px;height:64px}
+.item span{font-size:14px;font-weight:600;text-align:center;line-height:1.2}
+.item::after{content:"";position:absolute;inset:4px;border:4px solid var(--red);border-radius:50% 45% 52% 48%;transform:rotate(-6deg) scale(.6);opacity:0;transition:transform .25s cubic-bezier(.2,1.6,.4,1),opacity .2s;pointer-events:none}
+.item.marked::after{opacity:.9;transform:rotate(-6deg) scale(1)}
+.item.hint{animation:hintpulse 1s ease 3}
+@keyframes hintpulse{50%{box-shadow:0 0 0 6px var(--pist)}}
+.item.wrong{animation:shake .45s ease}
+.result{border-radius:16px;background:var(--choc);color:var(--cream);padding:16px;display:flex;flex-direction:column;gap:10px;animation:pop .4s ease}
+.result h2{font-size:22px;color:var(--pist)}
+.result p{margin:0;font-size:16px}
+.result .tag{align-self:flex-start;font-family:var(--f-display);font-weight:900;font-size:15px;letter-spacing:.08em;color:var(--red);background:var(--cream);border:3px solid var(--red);border-radius:6px;padding:3px 8px;transform:rotate(-3deg)}
+.prints{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.print{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:14px;background:#FFFBF1;border:2px solid var(--choc);box-shadow:0 4px 0 var(--kraft)}
+.print svg{width:100%;max-width:78px;height:auto}
+.print span{font-size:13px;font-weight:600;text-align:center;line-height:1.2}
+.print.right{background:var(--pist)}
+.print.wrong{animation:shake .45s ease;opacity:.55}
+.trail{width:100%;height:auto;display:block;border-radius:12px;background:#FFFBF1;border:2px solid var(--choc)}
+.trail .paw{opacity:0;animation:pawin .3s ease forwards}
+@keyframes pawin{to{opacity:1}}
+.dossier{background:#FFFBF1;color:var(--choc);border:2px solid var(--choc);border-radius:6px 16px 16px 16px;padding:16px;display:flex;flex-direction:column;gap:8px;position:relative;box-shadow:0 6px 0 var(--kraft)}
+.dossier dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px}
+.dossier dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
+.dossier dd{margin:0;min-width:0}
+.ask{border-left:5px solid var(--pist-deep);background:rgba(185,201,149,.25);padding:10px 12px;border-radius:0 10px 10px 0;font-size:15px}
+.ask b{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pist-deep)}
+.suspects{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.suspects li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;background:#FFFBF1;border:1.5px solid var(--paper-line);font-weight:600}
+.suspects li em{font-style:normal;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pist-deep)}
+.suspects li.main{border:2px solid var(--red)}
+.suspects li.main em{color:var(--red)}
+
 /* нижняя панель */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--choc);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(56,44,41,.25)}
-.dock nav{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.dock a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:10px;color:var(--kraft);text-decoration:none;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.dock nav{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.dock a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:10px;color:var(--kraft);text-decoration:none;font-family:var(--f-mono);font-size:9px;letter-spacing:0;text-transform:uppercase;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dock a svg{width:24px;height:24px}
 .dock a[aria-current="page"]{background:var(--choc-2);color:var(--pist)}
 
@@ -229,6 +265,10 @@ h2{font-size:clamp(24px,7vw,32px)}
     <symbol id="i-glass" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
     <symbol id="i-meter" viewBox="0 0 24 24"><path d="M3 17a9 9 0 0 1 18 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 17l4-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="2" fill="currentColor"/></symbol>
     <symbol id="i-safe" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="11" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18 9v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 10h2a2.5 2.5 0 0 1 0 5h-2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3v2M12 3v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sofa" viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M5 17v2M19 17v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="5" ry="4" fill="currentColor"/><circle cx="6" cy="10" r="2.2" fill="currentColor"/><circle cx="10" cy="6.5" r="2.2" fill="currentColor"/><circle cx="14" cy="6.5" r="2.2" fill="currentColor"/><circle cx="18" cy="10" r="2.2" fill="currentColor"/></symbol>
+    <symbol id="i-desk" viewBox="0 0 24 24"><path d="M3 9h18M5 9v11M19 9v11M13 9v6h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4h6l-1 5h-4z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
@@ -277,17 +317,143 @@ h2{font-size:clamp(24px,7vw,32px)}
 
       <div class="hint-card">
         <svg width="40" height="40" aria-hidden="true"><use href="#i-pist"/></svg>
-        <p><b>Что дальше.</b> Возвращайся к полю и начинай с кухни. Детектор правды понадобится в гостиной, сейф откроется в кабинете следователя.</p>
+        <p><b>Маршрут расследования.</b> Кухня, гостиная, прихожая, кабинет следователя. В каждой комнате ищи на поле QR-код. Начинай с кухни.</p>
       </div>
-      <a class="btn btn-main" href="#detector">Открыть детектор правды</a>
+      <a class="btn btn-main" href="#kitchen">Начать: кухня</a>
     </section>
 
-    <!-- 2. ДЕТЕКТОР -->
-    <section class="screen" id="s-detector" data-route="detector" aria-labelledby="h-det">
+    <!-- 2. КУХНЯ -->
+    <section class="screen" id="s-kitchen" data-route="kitchen" aria-labelledby="h-kitchen">
+      <div class="title-block">
+        <div class="eyebrow">Комната 01 · Кухня</div>
+        <h1 id="h-kitchen">Место происшествия</h1>
+        <p class="lead">Сравни с картинкой на карточке. Отметь все подозрительные предметы, которые выдают, что сладости открывали, и нажми «Проверить».</p>
+      </div>
+      <div class="items" id="items">
+        <button class="item" type="button" data-id="box" data-bad="1" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="30" width="40" height="24" rx="3" fill="#F5EEDC" stroke="#382C29" stroke-width="3"/><path d="M12 30l-6-12 40-4 6 16" fill="#B9C995" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><rect x="29" y="30" width="6" height="24" fill="#BD5148"/></svg><span>Открытая коробка</span></button>
+        <button class="item" type="button" data-id="kettle" data-bad="0" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 50c-4-16 2-28 16-28s20 12 16 28z" fill="#C8A77D" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><path d="M48 32l9-6M24 22c0-6 16-6 16 0" fill="none" stroke="#382C29" stroke-width="3" stroke-linecap="round"/><path d="M14 52h36" stroke="#382C29" stroke-width="3" stroke-linecap="round"/></svg><span>Чайник</span></button>
+        <button class="item" type="button" data-id="wrapper" data-bad="1" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 24h20v16H22z" fill="#BD5148" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><path d="M22 24l-12-6 4 14-4 14 12-6M42 24l12-6-4 14 4 14-12-6" fill="#F5EEDC" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/></svg><span>Фантик</span></button>
+        <button class="item" type="button" data-id="flower" data-bad="0" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 40h20l-3 16H25z" fill="#C8A77D" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><path d="M32 40V22" stroke="#5F6F3A" stroke-width="3"/><circle cx="32" cy="16" r="7" fill="#BD5148" stroke="#382C29" stroke-width="2.5"/><path d="M32 30c-6-4-10-2-12 2 4 2 8 2 12-2zM32 32c6-4 10-2 12 2-4 2-8 2-12-2z" fill="#B9C995" stroke="#382C29" stroke-width="2"/></svg><span>Цветок в горшке</span></button>
+        <button class="item" type="button" data-id="crumbs" data-bad="1" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 46h52" stroke="#382C29" stroke-width="3" stroke-linecap="round"/><g fill="#7A4B3E" stroke="#382C29" stroke-width="1.5"><circle cx="18" cy="40" r="3.5"/><circle cx="28" cy="36" r="2.5"/><circle cx="33" cy="42" r="4"/><circle cx="44" cy="38" r="3"/><circle cx="24" cy="43" r="2"/><circle cx="48" cy="43" r="2.2"/></g></svg><span>Крошки на столе</span></button>
+        <button class="item" type="button" data-id="cup" data-bad="0" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 26h26v14a10 10 0 0 1-10 10h-6a10 10 0 0 1-10-10z" fill="#F5EEDC" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><path d="M42 30h4a6 6 0 0 1 0 12h-4" fill="none" stroke="#382C29" stroke-width="3"/><path d="M24 14c-2 4 2 6 0 10M32 14c-2 4 2 6 0 10" stroke="#C8A77D" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg><span>Чашка</span></button>
+        <button class="item" type="button" data-id="shell" data-bad="1" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#i-pist" x="8" y="8" width="48" height="48"/></svg><span>Скорлупа фисташки</span></button>
+        <button class="item" type="button" data-id="bowl" data-bad="0" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 36h48c-2 12-10 18-24 18S10 48 8 36z" fill="#C8A77D" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/><path d="M14 36c4-6 32-6 36 0" fill="#7A4B3E" stroke="#382C29" stroke-width="2.5"/><text x="32" y="50" text-anchor="middle" font-size="9" font-weight="900" fill="#382C29" font-family="Arial">РИЧИ</text></svg><span>Миска Ричи</span></button>
+      </div>
+      <p class="safe-msg" id="kitchenMsg" aria-live="polite">Подозрительных предметов здесь четыре.</p>
+      <button class="btn btn-main" type="button" id="kitchenCheck">Проверить</button>
+      <button class="btn btn-ghost" type="button" id="kitchenHint">Агент, помоги</button>
+      <div class="result" id="kitchenDone" hidden>
+        <div class="tag">Улики найдены</div>
+        <h2>Сладости действительно открывали и ели</h2>
+        <p>Коробка открыта, фантик брошен, на столе крошки и скорлупа. Но кто это сделал?</p>
+        <a class="btn btn-main" href="#safe">Дальше: гостиная</a>
+      </div>
+      <img class="sticker st-mid tilt-l" src="{{agent4}}" width="{{agent4.w}}" height="{{agent4.h}}" alt="Агент А. с чашкой: «Продолжайте расследование»">
+    </section>
+
+    <!-- 3. ГОСТИНАЯ: СЕЙФ -->
+    <section class="screen" id="s-final" data-route="safe" aria-labelledby="h-safe">
       <div class="title-block">
         <div class="eyebrow">Комната 02 · Гостиная</div>
+        <h1 id="h-safe">Сейф агентства</h1>
+        <p class="lead">Разгадай загадку на карточке гостиной и введи код из трёх букв. Внутри лежит досье на одного из подозреваемых.</p>
+      </div>
+
+      <div class="slots" id="slots" aria-label="Введённый код">
+        <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+      </div>
+
+      <div class="safe" id="safe">
+        <div class="safe-body">
+          <div class="vault">
+            <svg viewBox="0 0 200 150" aria-hidden="true">
+              <path d="M30 40h50l10 12h80v84H30z" fill="#C8A77D" stroke="#382C29" stroke-width="3" stroke-linejoin="round"/>
+              <rect x="38" y="58" width="124" height="70" rx="3" fill="#F5EEDC" stroke="#382C29" stroke-width="2.5"/>
+              <text x="100" y="86" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="18" fill="#382C29">ДОСЬЕ</text>
+              <rect x="62" y="96" width="76" height="20" rx="3" fill="none" stroke="#BD5148" stroke-width="3" transform="rotate(-6 100 106)"/>
+              <text x="100" y="111" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#BD5148" transform="rotate(-6 100 106)">СЕКРЕТНО</text>
+              <g stroke="#D9E6B8" stroke-width="3" stroke-linecap="round"><path d="M100 8v14M60 18l8 10M140 18l-8 10"/></g>
+            </svg>
+          </div>
+          <div class="door" id="door">
+            <span class="bolt" style="left:12px;top:12px"></span><span class="bolt" style="right:12px;top:12px"></span>
+            <span class="bolt" style="left:12px;bottom:12px"></span><span class="bolt" style="right:12px;bottom:12px"></span>
+            <svg class="dial" id="dial" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="d-face" cx="60" cy="60" r="56"/>
+              <circle class="d-ring" cx="60" cy="60" r="44"/>
+              <text class="d-txt" x="60" y="30" text-anchor="middle">А</text>
+              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(120 60 60)">Б</text>
+              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(240 60 60)">В</text>
+              <circle cx="60" cy="60" r="14" fill="#C8A77D"/>
+              <path class="d-mark" d="M60 4l6 9h-12z"/>
+            </svg>
+            <span class="handle"></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="safe-msg" id="safeMsg" aria-live="polite">Введи три буквы. Сейф терпелив, но любопытен.</p>
+
+      <div class="keys" id="keys">
+        <button class="key" type="button" data-k="А"><b>А</b><small>буква</small></button>
+        <button class="key" type="button" data-k="Б"><b>Б</b><small>буква</small></button>
+        <button class="key" type="button" data-k="В"><b>В</b><small>буква</small></button>
+      </div>
+      <div class="row2" id="safeTools">
+        <button class="btn btn-ghost" type="button" id="clearBtn">Стереть и начать заново</button>
+      </div>
+
+      <div id="dossierWrap" hidden>
+        <div class="row2">
+          <div class="dossier">
+            <div class="eyebrow">Досье · секретно</div>
+            <h2>Старшая сестра</h2>
+            <dl>
+              <dt>Где живёт</dt><dd>Отдельно, в своей квартире</dd>
+              <dt>Алиби</dt><dd>В момент исчезновения сладостей в этой истории на месте не находилась</dd>
+            </dl>
+            <div class="result" style="animation:none"><div class="tag">Сестра исключена</div><p>Один подозреваемый снят. Ищи следующий след в прихожей.</p></div>
+          </div>
+          <div class="ask"><b>Можно спросить маму</b>«Мама, сестра была здесь, когда исчезли сладости?»</div>
+          <a class="btn btn-main" href="#steps">Дальше: прихожая</a>
+          <button class="btn btn-ghost" type="button" id="lockBtn">Закрыть сейф для новой игры</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ПРИХОЖАЯ -->
+    <section class="screen" id="s-steps" data-route="steps" aria-labelledby="h-steps">
+      <div class="title-block">
+        <div class="eyebrow">Комната 03 · Прихожая</div>
+        <h1 id="h-steps">Следы у двери</h1>
+        <p class="lead">На полу в прихожей три следа. Какой из них оставил Ричи? Посмотри на карточку и выбери.</p>
+      </div>
+      <div class="prints" id="prints">
+        <button class="print" type="button" data-right="0"><svg viewBox="0 0 62 92" aria-hidden="true"><path d="M20 8c14-4 26 4 26 22v40c0 8-6 14-14 14h-6c-8 0-12-6-12-14V30C14 18 14 10 20 8z" fill="#4A3B36"/><g stroke="#F5EEDC" stroke-width="3" opacity=".5"><path d="M20 30h22M20 42h22M20 54h22M20 72h22"/></g></svg><span>Большой ботинок</span></button>
+        <button class="print" type="button" data-right="1"><svg viewBox="0 0 62 92" aria-hidden="true"><ellipse cx="30" cy="62" rx="15" ry="13" fill="#4A3B36"/><ellipse cx="12" cy="40" rx="6" ry="8" fill="#4A3B36"/><ellipse cx="24" cy="28" rx="6" ry="8" fill="#4A3B36"/><ellipse cx="38" cy="28" rx="6" ry="8" fill="#4A3B36"/><ellipse cx="50" cy="40" rx="6" ry="8" fill="#4A3B36"/><g stroke="#4A3B36" stroke-width="2.5" stroke-linecap="round"><path d="M10 31l-2-5M23 19l-1-5M39 19l1-5M52 31l2-5"/></g></svg><span>Лапа с когтями</span></button>
+        <button class="print" type="button" data-right="0"><svg viewBox="0 0 62 92" aria-hidden="true"><path d="M30 6c12 0 18 12 18 30v30c0 12-8 20-18 20S12 78 12 66V36C12 18 18 6 30 6z" fill="#C8A77D" stroke="#382C29" stroke-width="2.5"/><circle cx="30" cy="30" r="5" fill="#BD5148"/><g fill="#F5EEDC"><circle cx="30" cy="22" r="4"/><circle cx="38" cy="30" r="4"/><circle cx="30" cy="38" r="4"/><circle cx="22" cy="30" r="4"/></g><circle cx="30" cy="30" r="3.5" fill="#BD5148"/></svg><span>Тапочка с цветочком</span></button>
+      </div>
+      <p class="safe-msg" id="stepsMsg" aria-live="polite">Подсказка: у Ричи четыре лапы и нет тапочек.</p>
+      <div class="result" id="stepsDone" hidden>
+        <div class="tag">Ричи исключён</div>
+        <h2>Да, это след Ричи</h2>
+        <svg class="trail" id="trail" viewBox="0 0 300 110" role="img" aria-label="Следы лап идут к двери и останавливаются">
+          <rect x="240" y="10" width="50" height="92" rx="4" fill="#C8A77D" stroke="#382C29" stroke-width="3"/>
+          <circle cx="250" cy="58" r="4" fill="#382C29"/>
+          <g style="color:#4A3B36"><use class="paw" href="#i-paw" x="10" y="62" width="22" height="22" transform="rotate(90 21 73)" style="animation-delay:0.00s"/><use class="paw" href="#i-paw" x="40" y="50" width="22" height="22" transform="rotate(90 51 61)" style="animation-delay:0.18s"/><use class="paw" href="#i-paw" x="70" y="62" width="22" height="22" transform="rotate(90 81 73)" style="animation-delay:0.36s"/><use class="paw" href="#i-paw" x="100" y="50" width="22" height="22" transform="rotate(90 111 61)" style="animation-delay:0.54s"/><use class="paw" href="#i-paw" x="130" y="62" width="22" height="22" transform="rotate(90 141 73)" style="animation-delay:0.72s"/><use class="paw" href="#i-paw" x="160" y="50" width="22" height="22" transform="rotate(90 171 61)" style="animation-delay:0.90s"/><use class="paw" href="#i-paw" x="190" y="62" width="22" height="22" transform="rotate(90 201 73)" style="animation-delay:1.08s"/></g>
+          <text x="150" y="104" text-anchor="middle" font-size="11" fill="#6E5C53" font-family="monospace">следы стоят у двери</text>
+        </svg>
+        <p>Он остаётся у двери и не ведёт к сладостям. Коробка стояла высоко, Ричи до неё не достать. Остаётся один главный подозреваемый.</p>
+        <a class="btn btn-main" href="#detector">Дальше: кабинет следователя</a>
+      </div>
+    </section>
+
+    <!-- 5. КАБИНЕТ: ДЕТЕКТОР И ОБВИНЕНИЕ -->
+    <section class="screen" id="s-detector" data-route="detector" aria-labelledby="h-det">
+      <div class="title-block">
+        <div class="eyebrow">Комната 04 · Кабинет следователя</div>
         <h1 id="h-det">Детектор фисташковой правды</h1>
-        <p class="lead">Задай маме вопрос, выслушай ответ и нажми кнопку. Прибор вынесет своё заключение.</p>
+        <p class="lead">Пригласи маму на допрос и отдай ей телефон. Задавай вопросы: мама отвечает и сама нажимает кнопку прибора.</p>
       </div>
 
       <div class="faceoff">
@@ -340,68 +506,20 @@ h2{font-size:clamp(24px,7vw,32px)}
 
       <img class="sticker st-mid tilt-r" src="{{agent2}}" width="{{agent2.w}}" height="{{agent2.h}}" alt="Агент А. поправляет очки: «Всё под контролем»">
       <p class="note"><b>Прибор шуточный.</b> Он ничего не слушает, ничего не записывает и знает о маме меньше, чем Полина. Окончательное решение всегда за следователем.</p>
-      <a class="btn btn-ghost" href="#start">Назад к сообщению агента</a>
-    </section>
-
-    <!-- 3. СЕЙФ -->
-    <section class="screen" id="s-final" data-route="final" aria-labelledby="h-safe">
-      <div class="title-block">
-        <div class="eyebrow">Комната 04 · Кабинет следователя</div>
-        <h1 id="h-safe">Сейф агентства</h1>
-        <p class="lead">Восстанови порядок архивных фраз с карточки 04. Последней должна стоять та, где мама во всём признаётся.</p>
+      <div class="row2">
+        <div class="eyebrow">Итоги расследования</div>
+        <ul class="suspects">
+          <li>Старшая сестра <em>исключена</em></li>
+          <li>Ричи <em>исключён</em></li>
+          <li>Агент А. <em>ушёл раньше</em></li>
+          <li class="main">Мама Саша <em>все улики ведут к ней</em></li>
+        </ul>
+        <button class="btn btn-main" type="button" id="accuseBtn">Следователь, предъяви обвинение</button>
       </div>
-      <img class="sticker st-mid tilt-l" src="{{agent4}}" width="{{agent4.w}}" height="{{agent4.h}}" alt="Агент А. с чашкой: «Продолжайте расследование»">
-
-      <div class="slots" id="slots" aria-label="Введённый код">
-        <div class="slot"></div><div class="slot"></div><div class="slot"></div>
-      </div>
-
-      <div class="safe" id="safe">
-        <div class="safe-body">
-          <div class="vault">
-            <svg viewBox="0 0 200 150" aria-hidden="true">
-              <rect x="20" y="58" width="160" height="80" rx="8" fill="#F5EEDC" stroke="#382C29" stroke-width="3"/>
-              <rect x="20" y="58" width="160" height="22" fill="#B9C995" stroke="#382C29" stroke-width="3"/>
-              <rect x="92" y="58" width="16" height="80" fill="#BD5148"/>
-              <path d="M100 58c-14-22-38-22-36-6 2 10 22 8 36 6zM100 58c14-22 38-22 36-6-2 10-22 8-36 6z" fill="#BD5148" stroke="#382C29" stroke-width="2.5"/>
-              <use href="#i-pist" x="34" y="92" width="34" height="34"/>
-              <use href="#i-pist" x="132" y="92" width="34" height="34"/>
-              <g stroke="#D9E6B8" stroke-width="3" stroke-linecap="round"><path d="M100 10v14M60 22l8 10M140 22l-8 10M30 46l12 4M170 46l-12 4"/></g>
-            </svg>
-          </div>
-          <div class="door" id="door">
-            <span class="bolt" style="left:12px;top:12px"></span><span class="bolt" style="right:12px;top:12px"></span>
-            <span class="bolt" style="left:12px;bottom:12px"></span><span class="bolt" style="right:12px;bottom:12px"></span>
-            <svg class="dial" id="dial" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="d-face" cx="60" cy="60" r="56"/>
-              <circle class="d-ring" cx="60" cy="60" r="44"/>
-              <text class="d-txt" x="60" y="30" text-anchor="middle">А</text>
-              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(120 60 60)">Б</text>
-              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(240 60 60)">В</text>
-              <circle cx="60" cy="60" r="14" fill="#C8A77D"/>
-              <path class="d-mark" d="M60 4l6 9h-12z"/>
-            </svg>
-            <span class="handle"></span>
-          </div>
-        </div>
-      </div>
-
-      <p class="safe-msg" id="safeMsg" aria-live="polite">Введи три буквы. Сейф терпелив, но любопытен.</p>
-
-      <div class="keys" id="keys">
-        <button class="key" type="button" data-k="А"><b>А</b><small>фраза</small></button>
-        <button class="key" type="button" data-k="Б"><b>Б</b><small>фраза</small></button>
-        <button class="key" type="button" data-k="В"><b>В</b><small>фраза</small></button>
-      </div>
-      <div class="row2" id="safeTools">
-        <button class="btn btn-ghost" type="button" id="clearBtn">Стереть и начать заново</button>
-      </div>
-
       <div id="arrestWrap" hidden>
         <div class="row2">
           <button class="btn btn-red pulse" type="button" id="arrestBtn">Мама, ты арестована!</button>
           <p class="note" style="text-align:center">Нажимать торжественно, глядя подозреваемой в глаза.</p>
-          <button class="btn btn-ghost" type="button" id="lockBtn">Закрыть сейф для новой игры</button>
         </div>
       </div>
     </section>
@@ -434,7 +552,7 @@ h2{font-size:clamp(24px,7vw,32px)}
         <video playsinline controls preload="metadata" hidden></video>
         <div class="letter fallback">
           <p>Детектив Полина, агентство восхищено.</p>
-          <p>Ты отличила возможность от вины, поймала подозреваемую на противоречии, сняла подозрения с Ричи и восстановила признание из архива. Так работают настоящие профессионалы.</p>
+          <p>Ты нашла улики на кухне, открыла сейф и сняла подозрения с сестры, распознала след Ричи и раскусила подозреваемую на детекторе. Так работают настоящие профессионалы.</p>
           <p>Коробка со сладостями переходит в твоё полное распоряжение. Выдать маме одну конфету за чистосердечное признание или нет, решает детектив.</p>
           <p class="sign">До встречи в деле № 002. Агент А.</p>
         </div>
@@ -464,8 +582,10 @@ h2{font-size:clamp(24px,7vw,32px)}
 <div class="dock">
   <nav aria-label="Комнаты приложения">
     <a href="#start" data-nav="start"><svg aria-hidden="true"><use href="#i-glass"/></svg>Агент</a>
-    <a href="#detector" data-nav="detector"><svg aria-hidden="true"><use href="#i-meter"/></svg>Детектор</a>
-    <a href="#final" data-nav="final"><svg aria-hidden="true"><use href="#i-safe"/></svg>Сейф</a>
+    <a href="#kitchen" data-nav="kitchen"><svg aria-hidden="true"><use href="#i-cup"/></svg>Кухня</a>
+    <a href="#safe" data-nav="safe"><svg aria-hidden="true"><use href="#i-sofa"/></svg>Гостиная</a>
+    <a href="#steps" data-nav="steps"><svg aria-hidden="true"><use href="#i-paw"/></svg>Прихожая</a>
+    <a href="#detector" data-nav="detector"><svg aria-hidden="true"><use href="#i-desk"/></svg>Кабинет</a>
     <a href="#award" data-nav="award"><svg aria-hidden="true"><use href="#i-star"/></svg>Награда</a>
   </nav>
 </div>
@@ -560,10 +680,11 @@ h2{font-size:clamp(24px,7vw,32px)}
   function buzz(p){ try { if (navigator.vibrate) navigator.vibrate(p); } catch(e){} }
 
   /* ===== Маршруты ===== */
-  var routes = ["start","detector","final","award"];
+  var routes = ["start","kitchen","safe","steps","detector","award"];
   var typed = false;
   function show(){
     var r = (location.hash || "").replace("#","");
+    if (r === "final") r = "safe"; /* старые QR-ссылки */
     if (routes.indexOf(r) < 0) r = "start";
     document.querySelectorAll(".screen").forEach(function(s){ s.classList.toggle("active", s.getAttribute("data-route") === r); });
     document.querySelectorAll("[data-nav]").forEach(function(a){
@@ -724,8 +845,8 @@ h2{font-size:clamp(24px,7vw,32px)}
     keys.forEach(function(k){ k.disabled = true; });
     $("safeTools").hidden = true;
     entered = CASE.code.slice(); renderSlots();
-    setMsg("Код верный. Сейф открыт, улика найдена!", "good");
-    setTimeout(function(){ var w = $("arrestWrap"); w.hidden = false; if (!instant) w.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"}); }, instant ? 0 : 1400);
+    setMsg("Код верный. Сейф открыт, внутри досье!", "good");
+    setTimeout(function(){ var w = $("dossierWrap"); w.hidden = false; if (!instant) w.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"}); }, instant ? 0 : 1400);
   }
   keys.forEach(function(k){
     k.addEventListener("click", function(){
@@ -751,7 +872,7 @@ h2{font-size:clamp(24px,7vw,32px)}
     state.safe = false; save();
     entered = []; wrongCount = 0; renderSlots();
     safe.classList.remove("open"); slots.classList.remove("good"); keys.forEach(function(k){ k.disabled = false; });
-    $("safeTools").hidden = false; $("arrestWrap").hidden = true; dial.style.transform = "rotate(0deg)";
+    $("safeTools").hidden = false; $("dossierWrap").hidden = true; dial.style.transform = "rotate(0deg)";
     setMsg("Введи три буквы. Сейф терпелив, но любопытен.");
   }
   $("lockBtn").addEventListener("click", function(){
@@ -762,6 +883,65 @@ h2{font-size:clamp(24px,7vw,32px)}
   if (state.safe) openSafe(true);
 
   /* арест */
+  /* кабинет: обвинение */
+  $("accuseBtn").addEventListener("click", function(){
+    this.hidden = true; sfx.verdict(); mood("slip");
+    var w = $("arrestWrap"); w.hidden = false; w.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"});
+  });
+
+  /* кухня */
+  var kitchenBtns = document.querySelectorAll("#items .item");
+  kitchenBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      if (!$("kitchenDone").hidden) return;
+      var on = !b.classList.contains("marked");
+      b.classList.toggle("marked", on); b.setAttribute("aria-pressed", on ? "true" : "false"); sfx.click();
+    });
+  });
+  $("kitchenCheck").addEventListener("click", function(){
+    var found = 0, extra = [], total = 0;
+    kitchenBtns.forEach(function(b){
+      var bad = b.getAttribute("data-bad") === "1", on = b.classList.contains("marked");
+      if (bad) total++;
+      if (bad && on) found++;
+      if (!bad && on){ extra.push(b.querySelector("span").textContent.toLowerCase()); b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong"); }
+    });
+    var m = $("kitchenMsg");
+    if (found === total && !extra.length){
+      m.textContent = "Все четыре улики найдены!"; m.className = "safe-msg good";
+      sfx.open(); buzz([60,40,120]);
+      this.hidden = true; $("kitchenHint").hidden = true;
+      var d = $("kitchenDone"); d.hidden = false; d.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"});
+    } else {
+      sfx.wrong(); buzz([90,50,90]);
+      m.className = "safe-msg bad";
+      m.textContent = extra.length ? "Найдено " + found + " из " + total + ". А вот " + extra.join(", ") + " тут ни при чём." : "Найдено " + found + " из " + total + ". Поищи ещё.";
+    }
+  });
+  $("kitchenHint").addEventListener("click", function(){
+    var miss = Array.prototype.filter.call(kitchenBtns, function(b){ return b.getAttribute("data-bad") === "1" && !b.classList.contains("marked"); })[0];
+    if (!miss){ $("kitchenMsg").textContent = "Все улики отмечены. Убери лишнее и нажми «Проверить»."; return; }
+    miss.classList.remove("hint"); void miss.offsetWidth; miss.classList.add("hint"); sfx.verdict();
+    $("kitchenMsg").className = "safe-msg"; $("kitchenMsg").textContent = "Агент подсвечивает одну улику. Присмотрись!";
+  });
+
+  /* прихожая */
+  document.querySelectorAll("#prints .print").forEach(function(b){
+    b.addEventListener("click", function(){
+      if (!$("stepsDone").hidden) return;
+      var m = $("stepsMsg");
+      if (b.getAttribute("data-right") === "1"){
+        b.classList.add("right"); sfx.toon(1); buzz([60,40,120]);
+        m.textContent = "Точно! Четыре пальца и когти: это Ричи."; m.className = "safe-msg good";
+        var d = $("stepsDone"); d.hidden = false; d.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"});
+      } else {
+        b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong"); sfx.wrong(); buzz([90,50,90]);
+        m.className = "safe-msg bad";
+        m.textContent = b.querySelector("span").textContent === "Тапочка с цветочком" ? "Это мамина тапочка. Интересно, но мы ищем след собаки." : "Такой большой ботинок у агента А., а он ушёл раньше. Ищем собаку.";
+      }
+    });
+  });
+
   $("arrestBtn").addEventListener("click", function(){
     sfx.arrest(); buzz([120,80,120,80,240]);
     $("arrest").hidden = false; $("toAward").focus();
@@ -795,6 +975,12 @@ h2{font-size:clamp(24px,7vw,32px)}
   $("resetBtn").addEventListener("click", function(){
     state = {tokens:[false,false,false], safe:false}; save();
     closeSafe(); drawTokens();
+    kitchenBtns.forEach(function(b){ b.classList.remove("marked","wrong","hint"); b.setAttribute("aria-pressed","false"); });
+    $("kitchenDone").hidden = true; $("kitchenCheck").hidden = false; $("kitchenHint").hidden = false;
+    $("kitchenMsg").className = "safe-msg"; $("kitchenMsg").textContent = "Подозрительных предметов здесь четыре.";
+    document.querySelectorAll("#prints .print").forEach(function(b){ b.classList.remove("right","wrong"); });
+    $("stepsDone").hidden = true; $("stepsMsg").className = "safe-msg"; $("stepsMsg").textContent = "Подсказка: у Ричи четыре лапы и нет тапочек.";
+    $("accuseBtn").hidden = false; $("arrestWrap").hidden = true;
     typed = false; if (location.hash === "#start") show(); else location.hash = "start";
   });
 

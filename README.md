@@ -6,16 +6,18 @@
 
 ## Дело № 001. Фисташковый след
 
-Ссылки для QR-кодов:
+Маршрут линейный: в каждой комнате одно действие и подсказка, куда идти дальше.
 
-| Экран | Ссылка |
-|---|---|
-| Агент А. | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#start |
-| Детектор правды | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#detector |
-| Сейф | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#final |
-| Награда | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#award |
+| Где QR | Экран | Ссылка |
+|---|---|---|
+| Коробка, начало | Приветствие агента А. | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#start |
+| 01 · Кухня | Кухня улик: отметить подозрительные предметы | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#kitchen |
+| 02 · Гостиная | Сейф агентства и досье сестры | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#safe |
+| 03 · Прихожая | Следы у двери: выбрать след Ричи | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#steps |
+| 04 · Кабинет | Детектор правды, обвинение, арест | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#detector |
+| Удостоверение | Награда | https://alexander-hairdresser.github.io/agent-a-quests/case-001/#award |
 
-Код сейфа: Б → В → А.
+Код сейфа: Б → В → А. Старая ссылка `#final` тоже ведёт на сейф.
 
 Видео агента: положи `agent-hello.mp4` и `agent-final.mp4` в `case-001/video/`. Пока файлов нет, на экранах показывается текст.
 
