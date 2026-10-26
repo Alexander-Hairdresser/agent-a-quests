@@ -198,6 +198,14 @@ h2{font-size:clamp(24px,7vw,32px)}
 .suspect img{grid-area:1/1;opacity:0;transform:scale(.94) rotate(2deg);transition:opacity .35s,transform .45s cubic-bezier(.2,1.5,.4,1)}
 .suspect img.on{opacity:1;transform:none}
 .arrest-card .sticker{width:92%;margin-top:-6px}
+.toon{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:45;display:flex;justify-content:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));pointer-events:none}
+.toon button{pointer-events:auto;width:min(380px,100%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:0}
+.toon img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 18px rgba(38,29,27,.45))}
+.toon .toon-cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--choc);color:var(--pist);padding:5px 10px;border-radius:8px}
+.toon.in button{animation:toon-in .7s cubic-bezier(.2,1.7,.4,1) both}
+.toon.out button{animation:toon-out .35s ease-in both}
+@keyframes toon-in{0%{transform:translateY(120%) scale(.4) rotate(-18deg)}55%{transform:translateY(-6%) scale(1.06) rotate(4deg)}75%{transform:translateY(2%) scale(.98) rotate(-2deg)}100%{transform:none}}
+@keyframes toon-out{to{transform:translateY(130%) scale(.6) rotate(12deg);opacity:0}}
 
 /* нижняя панель */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--choc);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(56,44,41,.25)}
@@ -441,13 +449,15 @@ h2{font-size:clamp(24px,7vw,32px)}
 <div class="arrest" id="arrest" hidden role="dialog" aria-modal="true" aria-labelledby="arrest-t">
   <div class="arrest-card">
     <div class="siren" aria-hidden="true"><i></i><i></i></div>
-    <img class="sticker" src="{{sasha1}}" width="{{sasha1.w}}" height="{{sasha1.h}}" alt="Мама подмигивает с фисташкой: «Только одну попробовала!»">
+    <img class="sticker" id="confessImg" src="{{sasha1}}" width="{{sasha1.w}}" height="{{sasha1.h}}" alt="Мама подмигивает с фисташкой: «Только одну попробовала!»">
     <div class="big-stamp" id="arrest-t">Арестована</div>
     <p><b>Подозреваемая:</b> мама Саша.<br><b>Статья:</b> несанкционированная дегустация фисташковых сладостей.</p>
     <p class="note">Приговор: крепкие объятия, чистосердечное признание вслух и одна конфета по решению следователя.</p>
     <button class="btn btn-main" type="button" id="toAward">Наградить детектива</button>
   </div>
 </div>
+
+<div class="toon" id="toon" hidden aria-live="polite"><button type="button" id="toonBtn" aria-label="Убрать стикер"><img id="toonImg" alt=""><span class="toon-cap" id="toonCap"></span></button></div>
 
 <canvas id="confetti" hidden></canvas>
 
@@ -527,6 +537,23 @@ h2{font-size:clamp(24px,7vw,32px)}
       for (var i=0;i<4;i++){ tone(560, i*.36, .18, "sine", .07, 760); tone(760, i*.36+.18, .18, "sine", .07, 560); }
       [392,523,659,784].forEach(function(f,i){ tone(f, 1.5 + i*.12, .3, "triangle", .08); });
       tone(1047, 2.0, .7, "triangle", .08);
+    },
+    toon: function(kind){
+      var a = audio(); if (!a) return;
+      function wob(f0, f1, start, dur, type, vol, rate, depth){
+        var t = a.currentTime + start, o = a.createOscillator(), g = a.createGain(), l = a.createOscillator(), lg = a.createGain();
+        o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+        l.frequency.value = rate; lg.gain.value = depth; l.connect(lg); lg.connect(o.frequency);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .03); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g); g.connect(a.destination); o.start(t); l.start(t); o.stop(t + dur + .05); l.stop(t + dur + .05);
+      }
+      if (kind === 0){ /* грустный тромбон «ва-ва-ва-ваа» */
+        [[392,0,.28],[370,.3,.28],[349,.6,.28],[330,.9,.8]].forEach(function(n){ wob(n[0], n[0]*.97, n[1], n[2], "sawtooth", .045, 6, n[0]*.02); });
+      } else if (kind === 1){ /* пружинка «бо-ойн» */
+        wob(140, 520, 0, .18, "sine", .12, 18, 30); wob(520, 260, .18, .55, "sine", .1, 14, 40);
+      } else { /* свисток вверх-вниз */
+        wob(500, 1600, 0, .35, "sine", .07, 9, 25); wob(1600, 600, .38, .45, "sine", .07, 9, 25);
+      }
     },
     fanfare: function(){ [523,659,784,659,784,1047].forEach(function(f,i){ tone(f, i*.13, .26, "triangle", .07); }); }
   };
@@ -633,6 +660,29 @@ h2{font-size:clamp(24px,7vw,32px)}
   }
 
   /* жетоны */
+  var TOKENS = [
+    {mood:"lawyer", img:function(){ return document.querySelector('#suspect [data-mood="lawyer"]').src; }, cap:"Жетон № 1 сдан",
+     title:"Подозреваемая требует адвоката", text:"Право на хитрость использовано. Задай следующий вопрос."},
+    {mood:"deny", img:function(){ return document.querySelector('#suspect [data-mood="deny"]').src; }, cap:"Жетон № 2 сдан",
+     title:"Это провокация!", text:"Подозреваемая возмущена и молчит. Детектор записал: очень подозрительно."},
+    {mood:"slip", img:function(){ return $("confessImg").src; }, cap:"Жетон № 3, последний",
+     title:"Хитрости больше нет", text:"Жетоны кончились. Теперь подозреваемой придётся отвечать на все вопросы."}
+  ];
+  var toonTimer = 0;
+  function hideToon(){
+    var el = $("toon"); if (el.hidden) return;
+    el.classList.remove("in"); el.classList.add("out");
+    clearTimeout(toonTimer); toonTimer = setTimeout(function(){ el.hidden = true; el.classList.remove("out"); }, 350);
+  }
+  function popToon(src, cap){
+    var el = $("toon"); clearTimeout(toonTimer);
+    $("toonImg").src = src; $("toonCap").textContent = cap;
+    el.hidden = false; el.classList.remove("in","out"); void el.offsetWidth; el.classList.add("in");
+    toonTimer = setTimeout(hideToon, 2800);
+  }
+  $("toonBtn").addEventListener("click", hideToon);
+  window.addEventListener("hashchange", function(){ $("toon").hidden = true; });
+
   function drawTokens(){
     var row = $("tokenRow"); row.innerHTML = "";
     state.tokens.forEach(function(used, i){
@@ -642,12 +692,15 @@ h2{font-size:clamp(24px,7vw,32px)}
       b.setAttribute("aria-pressed", used ? "true" : "false");
       b.innerHTML = '<svg aria-hidden="true"><use href="#i-pist"/></svg>';
       b.addEventListener("click", function(){
-        state.tokens[i] = !state.tokens[i]; save(); sfx.click(); drawTokens();
-        if (state.tokens[i]){
-          mood("lawyer");
-          var vd = $("verdict"); vd.className = "verdict pop";
-          vd.innerHTML = '<div class="v-title">Жетон сдан</div><p class="v-text">Подозреваемая пользуется правом на хитрость и требует адвоката. Задай следующий вопрос.</p>';
-        }
+        state.tokens[i] = !state.tokens[i]; save(); drawTokens();
+        if (!state.tokens[i]){ sfx.click(); return; }
+        var t = TOKENS[i];
+        mood(t.mood); sfx.toon(i); buzz([30,40,30]);
+        popToon(t.img(), t.cap);
+        var vd = $("verdict"); vd.className = "verdict pop";
+        vd.innerHTML = '<div class="v-title"></div><p class="v-text"></p>';
+        vd.querySelector(".v-title").textContent = t.title;
+        vd.querySelector(".v-text").textContent = t.text;
       });
       row.appendChild(b);
     });
