@@ -201,6 +201,7 @@ h2{font-size:clamp(24px,7vw,32px)}
 .toon{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:45;display:flex;justify-content:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));pointer-events:none}
 .toon button{pointer-events:auto;width:min(380px,100%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:0}
 .toon img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 18px rgba(38,29,27,.45))}
+.toon video{width:100%;height:auto;display:block;border-radius:18px;border:3px solid var(--choc);background:#fff;box-shadow:0 12px 24px rgba(38,29,27,.45)}
 .toon .toon-cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--choc);color:var(--pist);padding:5px 10px;border-radius:8px}
 .toon.in button{animation:toon-in .7s cubic-bezier(.2,1.7,.4,1) both}
 .toon.out button{animation:toon-out .35s ease-in both}
@@ -614,7 +615,7 @@ h2{font-size:clamp(24px,7vw,32px)}
   </div>
 </div>
 
-<div class="toon" id="toon" hidden aria-live="polite"><button type="button" id="toonBtn" aria-label="Убрать стикер"><img id="toonImg" alt=""><span class="toon-cap" id="toonCap"></span></button></div>
+<div class="toon" id="toon" hidden aria-live="polite"><button type="button" id="toonBtn" aria-label="Убрать стикер"><img id="toonImg" alt=""><video id="toonVid" playsinline preload="auto" hidden></video><span class="toon-cap" id="toonCap"></span></button></div>
 
 <canvas id="confetti" hidden></canvas>
 
@@ -822,26 +823,37 @@ h2{font-size:clamp(24px,7vw,32px)}
 
   /* жетоны */
   var TOKENS = [
-    {mood:"lawyer", img:function(){ return document.querySelector('#suspect [data-mood="lawyer"]').src; }, cap:"Жетон № 1 сдан",
+    {mood:"lawyer", img:function(){ return document.querySelector('#suspect [data-mood="lawyer"]').src; }, cap:"Жетон № 1 сдан", vid:"video/token-1.mp4",
      title:"Подозреваемая требует адвоката", text:"Право на хитрость использовано. Задай следующий вопрос."},
-    {mood:"deny", img:function(){ return document.querySelector('#suspect [data-mood="deny"]').src; }, cap:"Жетон № 2 сдан",
+    {mood:"deny", img:function(){ return document.querySelector('#suspect [data-mood="deny"]').src; }, cap:"Жетон № 2 сдан", vid:"video/token-2.mp4",
      title:"Это провокация!", text:"Подозреваемая возмущена и молчит. Детектор записал: очень подозрительно."},
-    {mood:"slip", img:function(){ return $("confessImg").src; }, cap:"Жетон № 3, последний",
+    {mood:"slip", img:function(){ return $("confessImg").src; }, cap:"Жетон № 3, последний", vid:"video/token-3.mp4",
      title:"Хитрости больше нет", text:"Жетоны кончились. Теперь подозреваемой придётся отвечать на все вопросы."}
   ];
   var toonTimer = 0;
   function hideToon(){
     var el = $("toon"); if (el.hidden) return;
+    try { $("toonVid").pause(); } catch(e){}
     el.classList.remove("in"); el.classList.add("out");
     clearTimeout(toonTimer); toonTimer = setTimeout(function(){ el.hidden = true; el.classList.remove("out"); }, 350);
   }
-  function popToon(src, cap){
-    var el = $("toon"); clearTimeout(toonTimer);
-    $("toonImg").src = src; $("toonCap").textContent = cap;
+  function popToon(src, cap, vid, onNoVideo){
+    var el = $("toon"), v = $("toonVid"), img = $("toonImg"); clearTimeout(toonTimer);
+    img.src = src; $("toonCap").textContent = cap;
+    v.hidden = true; img.hidden = false; try { v.pause(); } catch(e){}
+    if (vid){
+      v.src = vid; v.muted = false;
+      var p = null; try { p = v.play(); } catch(e){}
+      if (p && p.then){
+        p.then(function(){ v.hidden = false; img.hidden = true; clearTimeout(toonTimer); })
+         .catch(function(){ if (onNoVideo) onNoVideo(); });
+      } else if (onNoVideo) onNoVideo();
+    } else if (onNoVideo) onNoVideo();
     el.hidden = false; el.classList.remove("in","out"); void el.offsetWidth; el.classList.add("in");
     toonTimer = setTimeout(hideToon, 2800);
   }
   $("toonBtn").addEventListener("click", hideToon);
+  $("toonVid").addEventListener("ended", function(){ toonTimer = setTimeout(hideToon, 500); });
   window.addEventListener("hashchange", function(){ $("toon").hidden = true; });
 
   function drawTokens(){
@@ -856,8 +868,8 @@ h2{font-size:clamp(24px,7vw,32px)}
         state.tokens[i] = !state.tokens[i]; save(); drawTokens();
         if (!state.tokens[i]){ sfx.click(); return; }
         var t = TOKENS[i];
-        mood(t.mood); sfx.toon(i); buzz([30,40,30]);
-        popToon(t.img(), t.cap);
+        mood(t.mood); buzz([30,40,30]);
+        popToon(t.img(), t.cap, t.vid, function(){ sfx.toon(i); });
         var vd = $("verdict"); vd.className = "verdict pop";
         vd.innerHTML = '<div class="v-title"></div><p class="v-text"></p>';
         vd.querySelector(".v-title").textContent = t.title;
