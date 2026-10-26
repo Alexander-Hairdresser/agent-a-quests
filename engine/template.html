@@ -1,0 +1,750 @@
+<title>Фисташковое дело 001</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: досье на кремовой бумаге в клетку, внутри шоколадные «терминалы»; один экран за раз, снизу панель из четырёх комнат-маршрутов */
+:root{
+  --pist:#B9C995; --pist-deep:#5F6F3A; --pist-glow:#D9E6B8;
+  --cream:#F5EEDC; --paper-line:#E7DCC2;
+  --choc:#382C29; --choc-2:#4A3B36; --choc-3:#261D1B;
+  --kraft:#C8A77D; --kraft-deep:#9A7B52;
+  --red:#BD5148; --ink-soft:#6E5C53;
+  --f-mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"Roboto Mono","Courier New",monospace;
+  --f-display: "Arial Black","Helvetica Neue",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-body: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --f-letter: Georgia,"Times New Roman",serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{
+  margin:0;background:var(--cream);color:var(--choc);font-family:var(--f-body);font-size:16px;line-height:1.45;
+  background-image:
+    linear-gradient(var(--paper-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--paper-line) 1px,transparent 1px);
+  background-size:24px 24px;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+.wrap{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px calc(96px + env(safe-area-inset-bottom,0px))}
+
+/* шапка досье */
+.case-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:6px 14px;border-bottom:2px dashed var(--kraft)}
+.case-id{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);line-height:1.3}
+.case-id b{display:block;color:var(--choc);font-size:15px;letter-spacing:.08em}
+.stamp{font-family:var(--f-display);font-weight:900;font-size:12px;letter-spacing:.18em;color:var(--red);border:2.5px solid var(--red);border-radius:6px;padding:4px 8px;transform:rotate(-6deg);opacity:.9;white-space:nowrap}
+
+.screen{display:none;padding-top:18px;animation:enter .45s ease both}
+.screen.active{display:flex;flex-direction:column;gap:18px}
+@keyframes enter{from{opacity:.3;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--pist-deep);font-weight:700}
+h1,h2{font-family:var(--f-display);font-weight:900;margin:0;line-height:1.02;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(30px,9vw,42px)}
+h2{font-size:clamp(24px,7vw,32px)}
+.lead{margin:0;color:var(--ink-soft);font-size:16px;max-width:62ch}
+.title-block{display:flex;flex-direction:column;gap:8px}
+
+/* терминал */
+.term{background:var(--choc);color:var(--pist-glow);border-radius:14px;padding:16px;font-family:var(--f-mono);font-size:14px;line-height:1.55;box-shadow:0 10px 0 -4px var(--kraft),0 14px 30px rgba(56,44,41,.25);position:relative;overflow:hidden}
+.term::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);pointer-events:none}
+.term-bar{display:flex;gap:6px;align-items:center;margin-bottom:10px;color:var(--kraft);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.term-bar i{width:9px;height:9px;border-radius:50%;background:var(--kraft);display:inline-block;opacity:.7}
+.term-bar i:first-child{background:var(--red)}
+.term-bar i:nth-child(2){background:var(--pist)}
+.term-bar span{margin-left:auto}
+.tline{min-height:1.55em;white-space:pre-wrap;word-break:break-word}
+.tline .ok{color:var(--pist)}
+.tline .warn{color:#E89A8F}
+.cursor{display:inline-block;width:.6em;height:1.1em;background:var(--pist);vertical-align:-.2em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* агент */
+.agent-row{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center}
+.agent-row > div{min-width:0}
+.agent-svg{width:96px;height:112px}
+.glint{animation:glint 4s ease-in-out infinite}
+@keyframes glint{0%,70%,100%{opacity:0}78%{opacity:.95}86%{opacity:0}}
+
+/* видеослот */
+.vslot{display:flex;flex-direction:column;gap:10px}
+.vslot video{width:100%;max-width:100%;border-radius:12px;background:var(--choc-3);aspect-ratio:9/16;max-height:70vh;object-fit:contain}
+.vlabel{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;gap:8px;align-items:center}
+.vlabel .dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:blink 1.4s steps(1) infinite}
+.letter{background:#FFFBF1;border:1px solid var(--paper-line);border-radius:4px 14px 14px 14px;padding:16px 18px;font-family:var(--f-letter);font-size:17px;line-height:1.55;color:var(--choc);box-shadow:0 2px 0 var(--paper-line)}
+.letter p{margin:0 0 .7em}
+.letter p:last-child{margin:0}
+.letter .sign{font-style:italic;color:var(--ink-soft)}
+
+/* кнопки */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;padding:14px 18px;border-radius:14px;font-family:var(--f-display);font-weight:900;font-size:17px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.btn:active{transform:translateY(3px)}
+.btn-main{background:var(--pist);color:var(--choc);box-shadow:0 5px 0 var(--pist-deep)}
+.btn-main:active{box-shadow:0 2px 0 var(--pist-deep)}
+.btn-ghost{background:transparent;color:var(--choc);border:2px solid var(--choc);min-height:50px;font-size:14px}
+.btn-red{background:var(--red);color:#FFF6EE;box-shadow:0 6px 0 #8A342D;font-size:clamp(18px,5.6vw,23px);min-height:76px;letter-spacing:.03em}
+.btn-red:active{box-shadow:0 2px 0 #8A342D}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+
+.note{font-size:13px;color:var(--ink-soft);margin:0;max-width:62ch}
+.note b{color:var(--choc)}
+.hint-card{border:2px dashed var(--kraft);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;background:rgba(200,167,125,.12)}
+.hint-card svg{flex:none}
+.hint-card p{margin:0;font-size:14px;min-width:0}
+
+/* детектор */
+.gauge-card{background:var(--choc);border-radius:18px;padding:16px 14px 18px;color:var(--pist-glow);box-shadow:0 10px 0 -4px var(--kraft),0 14px 30px rgba(56,44,41,.25)}
+.gauge{width:100%;max-width:100%;height:auto;display:block}
+.g-tick{stroke:var(--kraft);stroke-width:2}
+.g-label{fill:var(--kraft);font-family:var(--f-mono);font-size:11px;letter-spacing:.12em}
+.g-seg1{stroke:var(--pist)}
+.g-seg2{stroke:var(--kraft)}
+.g-seg3{stroke:var(--red)}
+.g-hub{fill:var(--cream)}
+.g-hub2{fill:var(--choc)}
+.needle{transform-box:view-box;transform-origin:150px 160px;transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.needle line{stroke:var(--cream);stroke-width:5;stroke-linecap:round}
+.lamp{fill:var(--choc-2);transition:fill .2s}
+.lamp.on{fill:var(--pist)}
+.lamp.red.on{fill:var(--red)}
+.readout{font-family:var(--f-mono);text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--kraft);margin-top:4px;font-variant-numeric:tabular-nums}
+.verdict{min-height:120px;border-radius:14px;background:#FFFBF1;border:2px solid var(--choc);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.verdict .v-title{font-family:var(--f-display);font-weight:900;font-size:20px;line-height:1.1;text-wrap:balance}
+.verdict .v-text{margin:0;font-size:15px;color:var(--ink-soft)}
+.verdict.scan .v-title{color:var(--ink-soft)}
+.verdict.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:none}}
+
+.tokens{display:flex;flex-direction:column;gap:10px}
+.token-row{display:flex;gap:12px}
+.token{width:64px;height:64px;border-radius:50%;background:var(--kraft);border:3px solid var(--choc);display:grid;place-items:center;transition:transform .3s,opacity .3s,filter .3s;flex:none}
+.token svg{width:40px;height:40px}
+.token.used{opacity:.3;filter:grayscale(1);transform:rotate(-25deg) scale(.88)}
+
+/* сейф */
+.slots{display:flex;gap:10px;justify-content:center}
+.slot{width:64px;height:72px;border-radius:10px;background:var(--choc);color:var(--pist);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:34px;box-shadow:inset 0 -4px 0 var(--choc-3)}
+.slot.filled{animation:pop .25s ease}
+.slots.shake{animation:shake .5s ease}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.slots.good .slot{background:var(--pist);color:var(--choc)}
+
+.safe{position:relative;width:min(290px,100%);aspect-ratio:1/1;max-width:100%;margin:0 auto;perspective:900px}
+.safe-body{position:absolute;inset:0;border-radius:20px;background:var(--choc-2);box-shadow:0 10px 0 var(--choc-3),0 18px 34px rgba(56,44,41,.3)}
+.vault{position:absolute;inset:16px;border-radius:12px;background:radial-gradient(circle at 50% 60%,#5a4a3f,var(--choc-3) 75%);display:grid;place-items:center;overflow:hidden}
+.vault svg{width:78%;height:auto;opacity:0;transform:scale(.8);transition:opacity .6s .7s,transform .6s .7s}
+.safe.open .vault svg{opacity:1;transform:none}
+.door{position:absolute;inset:10px;border-radius:14px;transform-origin:left center;transition:transform 1.5s cubic-bezier(.6,.05,.3,1);background:linear-gradient(145deg,#D6BA93,var(--kraft) 45%,var(--kraft-deep));box-shadow:inset 0 0 0 3px rgba(56,44,41,.35),inset 0 0 0 10px rgba(255,255,255,.12);display:grid;place-items:center;transform-style:preserve-3d}
+.safe.open .door{transform:rotateY(-108deg)}
+.bolt{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--choc-2);box-shadow:inset 0 2px 0 rgba(255,255,255,.25)}
+.dial{width:58%;height:auto;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.d-face{fill:var(--choc)}
+.d-ring{fill:none;stroke:var(--cream);stroke-width:2;opacity:.5}
+.d-txt{fill:var(--cream);font-family:var(--f-display);font-weight:900;font-size:22px}
+.d-mark{fill:var(--red)}
+.handle{position:absolute;right:16px;top:50%;width:14px;height:64px;margin-top:-32px;border-radius:8px;background:var(--choc);box-shadow:inset 0 3px 0 rgba(255,255,255,.2)}
+.safe-msg{text-align:center;font-family:var(--f-mono);font-size:14px;min-height:2.8em;margin:0;color:var(--ink-soft)}
+.safe-msg.bad{color:var(--red)}
+.safe-msg.good{color:var(--pist-deep);font-weight:700}
+
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.key{min-height:92px;border-radius:16px;background:var(--cream);border:3px solid var(--choc);box-shadow:0 6px 0 var(--choc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .1s,box-shadow .1s}
+.key:active{transform:translateY(4px);box-shadow:0 2px 0 var(--choc)}
+.key b{font-family:var(--f-display);font-weight:900;font-size:40px;line-height:1}
+.key small{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.key:disabled{opacity:.45}
+.row2{display:grid;grid-template-columns:1fr;gap:10px}
+
+/* оверлей ареста */
+.arrest{position:fixed;inset:0;z-index:50;background:rgba(38,29,27,.88);display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.arrest-card{background:var(--cream);border-radius:18px;max-width:420px;width:100%;max-height:100%;overflow:auto;padding:26px 20px 20px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;position:relative;overflow:hidden}
+.big-stamp{font-family:var(--f-display);font-weight:900;color:var(--red);border:5px solid var(--red);border-radius:10px;padding:8px 14px;font-size:clamp(26px,9vw,40px);letter-spacing:.06em;transform:rotate(-8deg);animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stamp{from{transform:rotate(-8deg) scale(2.6);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+.arrest-card p{margin:0}
+.siren{display:flex;gap:10px}
+.siren i{width:20px;height:20px;border-radius:50%;background:var(--red);animation:siren .5s steps(1) infinite}
+.siren i:nth-child(2){background:#5D7FB5;animation-delay:.25s}
+@keyframes siren{50%{opacity:.15}}
+
+/* награда */
+.cert{background:#FFFBF1;border:2px solid var(--choc);border-radius:18px;padding:22px 18px;position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;box-shadow:0 8px 0 var(--kraft)}
+.cert::before{content:"";position:absolute;inset:7px;border:1.5px dashed var(--kraft);border-radius:12px;pointer-events:none}
+.badge{width:130px;height:130px;animation:spin-in 1s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes spin-in{from{transform:rotate(-200deg) scale(.3);opacity:0}to{transform:none;opacity:1}}
+.cert .who{font-family:var(--f-display);font-weight:900;font-size:clamp(24px,7.5vw,32px);line-height:1.05;text-wrap:balance}
+.cert .rank{font-family:var(--f-mono);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;background:var(--pist);padding:6px 10px;border-radius:6px}
+.cert .meta{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
+.cert .sig{font-family:var(--f-letter);font-style:italic;font-size:18px;color:var(--choc)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+.reset{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:underline;align-self:center;padding:8px}
+
+/* стикеры */
+.sticker{display:block;max-width:100%;height:auto;filter:drop-shadow(0 6px 10px rgba(56,44,41,.22))}
+.st-hero{width:100%;transform:rotate(-1.5deg);animation:stick-in .6s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stick-in{from{transform:rotate(-8deg) scale(.86);opacity:.2}to{transform:rotate(-1.5deg) scale(1);opacity:1}}
+.st-mid{width:82%;margin:0 auto}
+.tilt-r{transform:rotate(2deg)}
+.tilt-l{transform:rotate(-2deg)}
+.cast{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+.cast figure{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cast figcaption,.st-cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);text-align:center}
+.cast figcaption b,.st-cap b{display:block;color:var(--choc);font-size:13px;letter-spacing:.06em}
+.faceoff{background:#FFFBF1;border:2px solid var(--choc);border-radius:16px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:10px}
+.faceoff .vs{font-family:var(--f-display);font-weight:900;font-size:14px;letter-spacing:.2em;color:var(--red);text-align:center}
+.suspect{position:relative;display:grid}
+.suspect img{grid-area:1/1;opacity:0;transform:scale(.94) rotate(2deg);transition:opacity .35s,transform .45s cubic-bezier(.2,1.5,.4,1)}
+.suspect img.on{opacity:1;transform:none}
+.arrest-card .sticker{width:92%;margin-top:-6px}
+
+/* нижняя панель */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--choc);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(56,44,41,.25)}
+.dock nav{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dock a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:10px;color:var(--kraft);text-decoration:none;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.dock a svg{width:24px;height:24px}
+.dock a[aria-current="page"]{background:var(--choc-2);color:var(--pist)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-pist" viewBox="0 0 40 40">
+      <path d="M9 24c-3-9 4-18 13-18s14 8 10 17c-3 8-10 11-15 10C13 32 10 29 9 24z" fill="#C8A77D" stroke="#382C29" stroke-width="2"/>
+      <path d="M14 22c0-6 4-11 9-11 4 0 7 4 6 9-1 6-5 9-9 9-4 0-6-3-6-7z" fill="#9DB46B" stroke="#382C29" stroke-width="1.5"/>
+      <path d="M18 18c2-2 5-3 7-2" stroke="#D9E6B8" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-meter" viewBox="0 0 24 24"><path d="M3 17a9 9 0 0 1 18 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 17l4-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="2" fill="currentColor"/></symbol>
+    <symbol id="i-safe" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="11" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18 9v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="case-head">
+    <div class="case-id">Агентство А. · архив<b>Дело № 001 · Фисташковый след</b></div>
+    <div class="stamp">Секретно</div>
+  </header>
+
+  <main>
+    <!-- 1. СТАРТ -->
+    <section class="screen" id="s-start" data-route="start" aria-labelledby="h-start">
+      <div class="term" role="log" aria-live="polite">
+        <div class="term-bar"><i></i><i></i><i></i><span>канал А-001</span></div>
+        <div id="typer"></div>
+      </div>
+
+      <div class="title-block">
+        <div class="eyebrow">Входящее сообщение</div>
+        <h1 id="h-start">Агент А. на связи</h1>
+      </div>
+
+      <img class="sticker st-hero" src="{{agent1}}" width="{{agent1.w}}" height="{{agent1.h}}" alt="Агент А. в кепке и очках с рацией: «Агент А. на связи!»">
+
+      <div class="cast">
+        <figure>
+          <img class="sticker tilt-l" src="{{polina_lupa}}" width="{{polina_lupa.w}}" height="{{polina_lupa.h}}" alt="Полина с лупой">
+          <figcaption>Следователь<b>Полина</b></figcaption>
+        </figure>
+        <figure>
+          <img class="sticker tilt-r" src="{{agent3}}" width="{{agent3.w}}" height="{{agent3.h}}" alt="Агент А. прикладывает палец к губам: «Это секретно»">
+          <figcaption>Подозреваемый<b>засекречено</b></figcaption>
+        </figure>
+      </div>
+      <div class="vslot" data-video="video/agent-hello.mp4">
+        <div class="vlabel"><span class="dot"></span><span class="vstatus">Текстовая расшифровка сообщения</span></div>
+        <video playsinline controls preload="metadata" hidden></video>
+        <div class="letter fallback">
+          <p>Полина, добрый вечер. Это Агент А.</p>
+          <p>В прошлый раз фисташковые сладости исчезли при очень загадочных обстоятельствах. Сегодня на твоём столе новая коробка, и у агентства есть основания полагать, что история может повториться.</p>
+          <p>Пройди четыре комнаты: кухню, гостиную, прихожую и кабинет. Собирай улики, задавай вопросы и не верь подозрительно милым улыбкам. Главная подозреваемая уже рядом.</p>
+          <p class="sign">Удачи, детектив. Агент А.</p>
+        </div>
+      </div>
+
+      <div class="hint-card">
+        <svg width="40" height="40" aria-hidden="true"><use href="#i-pist"/></svg>
+        <p><b>Что дальше.</b> Возвращайся к полю и начинай с кухни. Детектор правды понадобится в гостиной, сейф откроется в кабинете следователя.</p>
+      </div>
+      <a class="btn btn-main" href="#detector">Открыть детектор правды</a>
+    </section>
+
+    <!-- 2. ДЕТЕКТОР -->
+    <section class="screen" id="s-detector" data-route="detector" aria-labelledby="h-det">
+      <div class="title-block">
+        <div class="eyebrow">Комната 02 · Гостиная</div>
+        <h1 id="h-det">Детектор фисташковой правды</h1>
+        <p class="lead">Задай маме вопрос, выслушай ответ и нажми кнопку. Прибор вынесет своё заключение.</p>
+      </div>
+
+      <div class="faceoff">
+        <div class="cast">
+          <figure>
+            <img class="sticker" src="{{polina_clue}}" width="{{polina_clue.w}}" height="{{polina_clue.h}}" alt="Полина держит фисташку-улику">
+            <figcaption>Следователь<b>Полина</b></figcaption>
+          </figure>
+          <figure>
+            <div class="suspect" id="suspect">
+              <img class="sticker on" data-mood="deny" src="{{sasha2}}" width="{{sasha2.w}}" height="{{sasha2.h}}" alt="Мама: «Это провокация!»">
+              <img class="sticker" data-mood="slip" src="{{sasha3}}" width="{{sasha3.w}}" height="{{sasha3.h}}" alt="Мама: «Я же знала, что там фисташка…»">
+              <img class="sticker" data-mood="lawyer" src="{{sasha4}}" width="{{sasha4.w}}" height="{{sasha4.h}}" alt="Мама в тёмных очках: «Я требую адвоката!»">
+            </div>
+            <figcaption>Подозреваемая<b>мама Саша</b></figcaption>
+          </figure>
+        </div>
+        <div class="vs">Очная ставка</div>
+      </div>
+
+      <div class="gauge-card">
+        <svg class="gauge" viewBox="0 0 300 190" role="img" aria-label="Шкала детектора">
+          <g id="g-arcs"></g>
+          <g id="g-ticks"></g>
+          <text class="g-label" x="22" y="184">ПРАВДА</text>
+          <text class="g-label" x="150" y="16" text-anchor="middle">ХМ…</text>
+          <text class="g-label" x="278" y="184" text-anchor="end">ХИТРОСТЬ</text>
+          <g class="needle" id="needle"><line x1="150" y1="160" x2="150" y2="54"/></g>
+          <circle class="g-hub" cx="150" cy="160" r="14"/>
+          <circle class="g-hub2" cx="150" cy="160" r="5"/>
+          <circle class="lamp" id="lamp1" cx="104" cy="182" r="5"/>
+          <circle class="lamp" id="lamp2" cx="150" cy="182" r="5"/>
+          <circle class="lamp red" id="lamp3" cx="196" cy="182" r="5"/>
+        </svg>
+        <div class="readout" id="readout">Фисташковость: —</div>
+      </div>
+
+      <div class="verdict" id="verdict" aria-live="polite">
+        <div class="v-title">Прибор готов</div>
+        <p class="v-text">Стрелка ждёт. Подозреваемая, говорите только правду.</p>
+      </div>
+
+      <button class="btn btn-main" id="scanBtn" type="button">Проверить ответ мамы</button>
+
+      <div class="tokens">
+        <div class="eyebrow">Жетоны «Мамина хитрость»</div>
+        <div class="token-row" id="tokenRow"></div>
+        <p class="note">Мама может сдать жетон и не отвечать на один вопрос. Нажми на жетон, когда он потрачен.</p>
+      </div>
+
+      <img class="sticker st-mid tilt-r" src="{{agent2}}" width="{{agent2.w}}" height="{{agent2.h}}" alt="Агент А. поправляет очки: «Всё под контролем»">
+      <p class="note"><b>Прибор шуточный.</b> Он ничего не слушает, ничего не записывает и знает о маме меньше, чем Полина. Окончательное решение всегда за следователем.</p>
+      <a class="btn btn-ghost" href="#start">Назад к сообщению агента</a>
+    </section>
+
+    <!-- 3. СЕЙФ -->
+    <section class="screen" id="s-final" data-route="final" aria-labelledby="h-safe">
+      <div class="title-block">
+        <div class="eyebrow">Комната 04 · Кабинет следователя</div>
+        <h1 id="h-safe">Сейф агентства</h1>
+        <p class="lead">Восстанови порядок архивных фраз с карточки 04. Последней должна стоять та, где мама во всём признаётся.</p>
+      </div>
+      <img class="sticker st-mid tilt-l" src="{{agent4}}" width="{{agent4.w}}" height="{{agent4.h}}" alt="Агент А. с чашкой: «Продолжайте расследование»">
+
+      <div class="slots" id="slots" aria-label="Введённый код">
+        <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+      </div>
+
+      <div class="safe" id="safe">
+        <div class="safe-body">
+          <div class="vault">
+            <svg viewBox="0 0 200 150" aria-hidden="true">
+              <rect x="20" y="58" width="160" height="80" rx="8" fill="#F5EEDC" stroke="#382C29" stroke-width="3"/>
+              <rect x="20" y="58" width="160" height="22" fill="#B9C995" stroke="#382C29" stroke-width="3"/>
+              <rect x="92" y="58" width="16" height="80" fill="#BD5148"/>
+              <path d="M100 58c-14-22-38-22-36-6 2 10 22 8 36 6zM100 58c14-22 38-22 36-6-2 10-22 8-36 6z" fill="#BD5148" stroke="#382C29" stroke-width="2.5"/>
+              <use href="#i-pist" x="34" y="92" width="34" height="34"/>
+              <use href="#i-pist" x="132" y="92" width="34" height="34"/>
+              <g stroke="#D9E6B8" stroke-width="3" stroke-linecap="round"><path d="M100 10v14M60 22l8 10M140 22l-8 10M30 46l12 4M170 46l-12 4"/></g>
+            </svg>
+          </div>
+          <div class="door" id="door">
+            <span class="bolt" style="left:12px;top:12px"></span><span class="bolt" style="right:12px;top:12px"></span>
+            <span class="bolt" style="left:12px;bottom:12px"></span><span class="bolt" style="right:12px;bottom:12px"></span>
+            <svg class="dial" id="dial" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="d-face" cx="60" cy="60" r="56"/>
+              <circle class="d-ring" cx="60" cy="60" r="44"/>
+              <text class="d-txt" x="60" y="30" text-anchor="middle">А</text>
+              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(120 60 60)">Б</text>
+              <text class="d-txt" x="60" y="30" text-anchor="middle" transform="rotate(240 60 60)">В</text>
+              <circle cx="60" cy="60" r="14" fill="#C8A77D"/>
+              <path class="d-mark" d="M60 4l6 9h-12z"/>
+            </svg>
+            <span class="handle"></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="safe-msg" id="safeMsg" aria-live="polite">Введи три буквы. Сейф терпелив, но любопытен.</p>
+
+      <div class="keys" id="keys">
+        <button class="key" type="button" data-k="А"><b>А</b><small>фраза</small></button>
+        <button class="key" type="button" data-k="Б"><b>Б</b><small>фраза</small></button>
+        <button class="key" type="button" data-k="В"><b>В</b><small>фраза</small></button>
+      </div>
+      <div class="row2" id="safeTools">
+        <button class="btn btn-ghost" type="button" id="clearBtn">Стереть и начать заново</button>
+      </div>
+
+      <div id="arrestWrap" hidden>
+        <div class="row2">
+          <button class="btn btn-red pulse" type="button" id="arrestBtn">Мама, ты арестована!</button>
+          <p class="note" style="text-align:center">Нажимать торжественно, глядя подозреваемой в глаза.</p>
+          <button class="btn btn-ghost" type="button" id="lockBtn">Закрыть сейф для новой игры</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. НАГРАДА -->
+    <section class="screen" id="s-award" data-route="award" aria-labelledby="h-award">
+      <div class="title-block">
+        <div class="eyebrow">Дело закрыто</div>
+        <h1 id="h-award">Справедливость восстановлена</h1>
+      </div>
+      <img class="sticker st-hero" src="{{polina_solved}}" width="{{polina_solved.w}}" height="{{polina_solved.h}}" alt="Полина с папкой «Дело раскрыто!»">
+
+      <div class="cert">
+        <svg class="badge" viewBox="0 0 140 140" role="img" aria-label="Знак детектива">
+          <path d="M70 6l14 12 18-3 5 17 16 9-6 17 6 17-16 9-5 17-18-3-14 12-14-12-18 3-5-17-16-9 6-17-6-17 16-9 5-17 18 3z" fill="#C8A77D" stroke="#382C29" stroke-width="3"/>
+          <circle cx="70" cy="70" r="38" fill="#B9C995" stroke="#382C29" stroke-width="3"/>
+          <circle cx="70" cy="70" r="31" fill="none" stroke="#382C29" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <use href="#i-pist" x="46" y="44" width="48" height="48"/>
+          <path d="M44 112l-10 24 14-5 8 11 8-22M96 112l10 24-14-5-8 11-8-22" fill="#BD5148" stroke="#382C29" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <div class="who" id="certName">Полина Землянская</div>
+        <div class="rank">Детектив первого класса</div>
+        <p class="note" style="max-width:34ch">За блестящее раскрытие дела № 001 «Фисташковый след», железную логику и непоколебимость перед маминой хитростью.</p>
+        <div class="meta" id="certDate">Агентство А. · 27.10.2026</div>
+        <div class="sig">Агент А.</div>
+      </div>
+
+      <div class="vslot" data-video="video/agent-final.mp4">
+        <div class="vlabel"><span class="dot"></span><span class="vstatus">Текстовая расшифровка сообщения</span></div>
+        <video playsinline controls preload="metadata" hidden></video>
+        <div class="letter fallback">
+          <p>Детектив Полина, агентство восхищено.</p>
+          <p>Ты отличила возможность от вины, поймала подозреваемую на противоречии, сняла подозрения с Ричи и восстановила признание из архива. Так работают настоящие профессионалы.</p>
+          <p>Коробка со сладостями переходит в твоё полное распоряжение. Выдать маме одну конфету за чистосердечное признание или нет, решает детектив.</p>
+          <p class="sign">До встречи в деле № 002. Агент А.</p>
+        </div>
+      </div>
+
+      <button class="btn btn-main" type="button" id="cheerBtn">Ещё раз салют!</button>
+      <button class="reset" type="button" id="resetBtn">Начать дело заново</button>
+    </section>
+  </main>
+</div>
+
+<div class="arrest" id="arrest" hidden role="dialog" aria-modal="true" aria-labelledby="arrest-t">
+  <div class="arrest-card">
+    <div class="siren" aria-hidden="true"><i></i><i></i></div>
+    <img class="sticker" src="{{sasha1}}" width="{{sasha1.w}}" height="{{sasha1.h}}" alt="Мама подмигивает с фисташкой: «Только одну попробовала!»">
+    <div class="big-stamp" id="arrest-t">Арестована</div>
+    <p><b>Подозреваемая:</b> мама Саша.<br><b>Статья:</b> несанкционированная дегустация фисташковых сладостей.</p>
+    <p class="note">Приговор: крепкие объятия, чистосердечное признание вслух и одна конфета по решению следователя.</p>
+    <button class="btn btn-main" type="button" id="toAward">Наградить детектива</button>
+  </div>
+</div>
+
+<canvas id="confetti" hidden></canvas>
+
+<div class="dock">
+  <nav aria-label="Комнаты приложения">
+    <a href="#start" data-nav="start"><svg aria-hidden="true"><use href="#i-glass"/></svg>Агент</a>
+    <a href="#detector" data-nav="detector"><svg aria-hidden="true"><use href="#i-meter"/></svg>Детектор</a>
+    <a href="#final" data-nav="final"><svg aria-hidden="true"><use href="#i-safe"/></svg>Сейф</a>
+    <a href="#award" data-nav="award"><svg aria-hidden="true"><use href="#i-star"/></svg>Награда</a>
+  </nav>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ===== Тексты дела: правьте здесь для будущих дел ===== */
+  var CASE = {
+    code: ["Б","В","А"],
+    terminal: [
+      "> АГЕНТСТВО А. · ЗАЩИЩЁННЫЙ КАНАЛ",
+      "> проверка личности…",
+      "> следователь ПОЛИНА: <span class=\"ok\">подтверждено</span>",
+      "> дело № 001 «Фисташковый след»",
+      "> статус: <span class=\"warn\">сладости снова в опасности</span>"
+    ],
+    verdicts: [
+      {v:.08, t:"Чистая правда. Подозрительно чистая", x:"Прибор доволен. Следователю всё равно рекомендуется задать ещё один вопрос."},
+      {v:.30, t:"Прибор задумался", x:"Данных маловато. Детектор работает на сладостях, а их пока не выдали."},
+      {v:.48, t:"Фисташковость средняя", x:"Ответ звучит гладко. Слишком гладко. Уточни, откуда маме известна начинка."},
+      {v:.60, t:"Ричи вне подозрений", x:"Собака чиста, коробка стояла высоко. Прибор продолжает наблюдать за мамой."},
+      {v:.70, t:"Мама улыбается. Это улика", x:"По статистике агентства, девять улыбок из десяти скрывают одну конфету."},
+      {v:.82, t:"Обнаружены следы фисташкового крема", x:"Показания расходятся с уликой из гостиной. Пусть подозреваемая объяснится."},
+      {v:.90, t:"Показания тают, как шоколад", x:"Спроси прямо: «Откуда ты знаешь, что там внутри?»"},
+      {v:.97, t:"Тревога! Хитрость зашкаливает", x:"Прибор чихнул от количества крошек. Самое время сдать жетон «Мамина хитрость»."}
+    ],
+    wrong: [
+      "Сейф хмыкнул. Порядок не тот, перечитай карточку 04.",
+      "Почти. Помни: признание идёт последним.",
+      "Сейф не сдаётся так просто. Ещё попытка?"
+    ],
+    hint: "Подсказка агента: начни с фразы, где мама вообще ничего не видела."
+  };
+
+  /* ===== Хранилище (необязательное) ===== */
+  var KEY = "agentA-case001";
+  var state = {tokens:[false,false,false], safe:false};
+  try { var raw = localStorage.getItem(KEY); if (raw) { var s = JSON.parse(raw); if (s && s.tokens) state = s; } } catch(e){}
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ===== Звук: мягкий синтезатор без файлов ===== */
+  var ac = null;
+  function audio(){
+    try { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === "suspended") ac.resume(); } catch(e){ ac = null; }
+    return ac;
+  }
+  function tone(freq, start, dur, type, vol, slideTo){
+    var a = audio(); if (!a) return;
+    var t = a.currentTime + start, o = a.createOscillator(), g = a.createGain();
+    o.type = type || "sine"; o.frequency.setValueAtTime(freq, t);
+    if (slideTo) o.frequency.linearRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol || 0.08, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+  }
+  var sfx = {
+    click: function(){ tone(900, 0, .06, "triangle", .05); },
+    blip: function(){ tone(520 + Math.random()*500, 0, .05, "square", .018); },
+    wrong: function(){ tone(260, 0, .18, "triangle", .07, 200); tone(200, .2, .3, "triangle", .07, 150); },
+    open: function(){ [523,659,784,1047].forEach(function(f,i){ tone(f, i*.11, .25, "triangle", .07); }); },
+    verdict: function(){ tone(660, 0, .12, "sine", .06); tone(880, .12, .2, "sine", .06); },
+    arrest: function(){
+      for (var i=0;i<4;i++){ tone(560, i*.36, .18, "sine", .07, 760); tone(760, i*.36+.18, .18, "sine", .07, 560); }
+      [392,523,659,784].forEach(function(f,i){ tone(f, 1.5 + i*.12, .3, "triangle", .08); });
+      tone(1047, 2.0, .7, "triangle", .08);
+    },
+    fanfare: function(){ [523,659,784,659,784,1047].forEach(function(f,i){ tone(f, i*.13, .26, "triangle", .07); }); }
+  };
+  function buzz(p){ try { if (navigator.vibrate) navigator.vibrate(p); } catch(e){} }
+
+  /* ===== Маршруты ===== */
+  var routes = ["start","detector","final","award"];
+  var typed = false;
+  function show(){
+    var r = (location.hash || "").replace("#","");
+    if (routes.indexOf(r) < 0) r = "start";
+    document.querySelectorAll(".screen").forEach(function(s){ s.classList.toggle("active", s.getAttribute("data-route") === r); });
+    document.querySelectorAll("[data-nav]").forEach(function(a){
+      if (a.getAttribute("data-nav") === r) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+    window.scrollTo(0,0);
+    if (r === "start" && !typed){ typed = true; typeTerminal(); }
+    if (r === "award") setTimeout(function(){ confetti(); }, 350);
+  }
+  window.addEventListener("hashchange", show);
+
+  /* ===== Терминал ===== */
+  function typeTerminal(){
+    var box = $("typer"); box.innerHTML = "";
+    var lines = CASE.terminal;
+    if (reduce){ box.innerHTML = lines.map(function(l){ return '<div class="tline">'+l+'</div>'; }).join("") + '<div class="tline"><span class="cursor"></span></div>'; return; }
+    var li = 0;
+    function next(){
+      if (li >= lines.length){ var c = document.createElement("div"); c.className = "tline"; c.innerHTML = '<span class="cursor"></span>'; box.appendChild(c); return; }
+      var html = lines[li], plain = html.replace(/<[^>]+>/g,""), el = document.createElement("div"), ci = 0;
+      el.className = "tline"; box.appendChild(el);
+      (function step(){
+        ci++; el.textContent = plain.slice(0, ci);
+        if (ci < plain.length) setTimeout(step, 22); else { el.innerHTML = html; li++; setTimeout(next, 260); }
+      })();
+    }
+    next();
+  }
+
+  /* ===== Видеослоты: есть файл — видео, нет файла — текст ===== */
+  document.querySelectorAll(".vslot").forEach(function(slot){
+    var v = slot.querySelector("video"), fb = slot.querySelector(".fallback"), st = slot.querySelector(".vstatus");
+    v.addEventListener("loadedmetadata", function(){
+      v.hidden = false; fb.hidden = true; st.textContent = "Видеосообщение агента А.";
+    });
+    v.addEventListener("error", function(){ v.hidden = true; fb.hidden = false; }, true);
+    try { v.src = slot.getAttribute("data-video"); } catch(e){}
+  });
+
+  /* ===== Детектор ===== */
+  var NS = "http://www.w3.org/2000/svg", CX = 150, CY = 160, R = 118;
+  function pt(v, r){ var a = Math.PI + v*Math.PI; return [CX + r*Math.cos(a), CY + r*Math.sin(a)]; }
+  function arc(v0, v1, cls){
+    var p0 = pt(v0, R), p1 = pt(v1, R), p = document.createElementNS(NS, "path");
+    p.setAttribute("d", "M"+p0[0].toFixed(1)+" "+p0[1].toFixed(1)+" A"+R+" "+R+" 0 0 1 "+p1[0].toFixed(1)+" "+p1[1].toFixed(1));
+    p.setAttribute("class", cls); p.setAttribute("fill", "none"); p.setAttribute("stroke-width", "18"); p.setAttribute("stroke-linecap", "butt");
+    $("g-arcs").appendChild(p);
+  }
+  arc(0, .333, "g-seg1"); arc(.343, .657, "g-seg2"); arc(.667, 1, "g-seg3");
+  for (var i=0;i<=20;i++){
+    var a = pt(i/20, R-16), b = pt(i/20, R-(i%5===0?30:23)), l = document.createElementNS(NS, "line");
+    l.setAttribute("x1", a[0]); l.setAttribute("y1", a[1]); l.setAttribute("x2", b[0]); l.setAttribute("y2", b[1]); l.setAttribute("class","g-tick");
+    $("g-ticks").appendChild(l);
+  }
+  var needle = $("needle");
+  function setNeedle(v){ needle.style.transform = "rotate(" + (-90 + v*180).toFixed(1) + "deg)"; }
+  function lamps(v){
+    $("lamp1").classList.toggle("on", v < .34);
+    $("lamp2").classList.toggle("on", v >= .34 && v < .67);
+    $("lamp3").classList.toggle("on", v >= .67);
+  }
+  setNeedle(.5);
+  var last = -1, scanning = false;
+  $("scanBtn").addEventListener("click", function(){
+    if (scanning) return; scanning = true;
+    var btn = this, vd = $("verdict"); btn.disabled = true; btn.textContent = "Анализ…";
+    vd.className = "verdict scan";
+    vd.innerHTML = '<div class="v-title">Сканирую фисташковое поле…</div><p class="v-text">Подозреваемая, сохраняйте невозмутимое лицо.</p>';
+    var n = 0, total = reduce ? 1 : 14;
+    var iv = setInterval(function(){
+      var v = Math.random(); setNeedle(v); lamps(v); sfx.blip();
+      $("readout").textContent = "Фисташковость: " + Math.round(v*100) + "%";
+      if (++n >= total){
+        clearInterval(iv);
+        var k; do { k = Math.floor(Math.random()*CASE.verdicts.length); } while (k === last && CASE.verdicts.length > 1);
+        last = k;
+        var res = CASE.verdicts[k];
+        setNeedle(res.v); lamps(res.v); mood(res.v >= .67 ? "slip" : "deny");
+        $("readout").textContent = "Фисташковость: " + Math.round(res.v*100) + "%";
+        setTimeout(function(){
+          vd.className = "verdict pop";
+          vd.innerHTML = '<div class="v-title"></div><p class="v-text"></p>';
+          vd.querySelector(".v-title").textContent = res.t;
+          vd.querySelector(".v-text").textContent = res.x;
+          sfx.verdict(); buzz(40);
+          btn.disabled = false; btn.textContent = "Проверить ещё раз"; scanning = false;
+        }, 450);
+      }
+    }, 150);
+  });
+
+  function mood(m){
+    document.querySelectorAll("#suspect img").forEach(function(im){ im.classList.toggle("on", im.getAttribute("data-mood") === m); });
+  }
+
+  /* жетоны */
+  function drawTokens(){
+    var row = $("tokenRow"); row.innerHTML = "";
+    state.tokens.forEach(function(used, i){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "token" + (used ? " used" : "");
+      b.setAttribute("aria-label", "Жетон " + (i+1) + (used ? ", потрачен" : ", доступен"));
+      b.setAttribute("aria-pressed", used ? "true" : "false");
+      b.innerHTML = '<svg aria-hidden="true"><use href="#i-pist"/></svg>';
+      b.addEventListener("click", function(){
+        state.tokens[i] = !state.tokens[i]; save(); sfx.click(); drawTokens();
+        if (state.tokens[i]){
+          mood("lawyer");
+          var vd = $("verdict"); vd.className = "verdict pop";
+          vd.innerHTML = '<div class="v-title">Жетон сдан</div><p class="v-text">Подозреваемая пользуется правом на хитрость и требует адвоката. Задай следующий вопрос.</p>';
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+  drawTokens();
+
+  /* ===== Сейф ===== */
+  var entered = [], wrongCount = 0;
+  var slots = $("slots"), msg = $("safeMsg"), safe = $("safe"), dial = $("dial");
+  var dialAngle = {"А":0, "Б":-120, "В":-240};
+  var keys = document.querySelectorAll(".key");
+  function renderSlots(){
+    slots.querySelectorAll(".slot").forEach(function(s, i){
+      var val = entered[i] || "";
+      if (s.textContent !== val){ s.textContent = val; s.classList.remove("filled"); if (val){ void s.offsetWidth; s.classList.add("filled"); } }
+    });
+  }
+  function setMsg(t, cls){ msg.textContent = t; msg.className = "safe-msg" + (cls ? " " + cls : ""); }
+  function openSafe(instant){
+    safe.classList.add("open"); slots.classList.add("good");
+    keys.forEach(function(k){ k.disabled = true; });
+    $("safeTools").hidden = true;
+    entered = CASE.code.slice(); renderSlots();
+    setMsg("Код верный. Сейф открыт, улика найдена!", "good");
+    setTimeout(function(){ var w = $("arrestWrap"); w.hidden = false; if (!instant) w.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"}); }, instant ? 0 : 1400);
+  }
+  keys.forEach(function(k){
+    k.addEventListener("click", function(){
+      if (entered.length >= 3 || state.safe) return;
+      var L = k.getAttribute("data-k");
+      entered.push(L); sfx.click(); buzz(15);
+      dial.style.transform = "rotate(" + (dialAngle[L] + 360*entered.length) + "deg)";
+      renderSlots();
+      if (entered.length < 3){ setMsg("Принято: " + entered.join(" → ") + ". Дальше?"); return; }
+      if (entered.join("") === CASE.code.join("")){
+        state.safe = true; save(); sfx.open(); buzz([60,40,120]);
+        setTimeout(function(){ openSafe(false); }, 250);
+      } else {
+        wrongCount++; sfx.wrong(); buzz([90,50,90]);
+        slots.classList.remove("shake"); void slots.offsetWidth; slots.classList.add("shake");
+        setMsg(wrongCount >= 3 ? CASE.hint : CASE.wrong[(wrongCount-1) % CASE.wrong.length], "bad");
+        setTimeout(function(){ entered = []; renderSlots(); }, 700);
+      }
+    });
+  });
+  $("clearBtn").addEventListener("click", function(){ entered = []; renderSlots(); sfx.click(); setMsg("Чистый лист. Введи три буквы."); dial.style.transform = "rotate(0deg)"; });
+  function closeSafe(){
+    state.safe = false; save();
+    entered = []; wrongCount = 0; renderSlots();
+    safe.classList.remove("open"); slots.classList.remove("good"); keys.forEach(function(k){ k.disabled = false; });
+    $("safeTools").hidden = false; $("arrestWrap").hidden = true; dial.style.transform = "rotate(0deg)";
+    setMsg("Введи три буквы. Сейф терпелив, но любопытен.");
+  }
+  $("lockBtn").addEventListener("click", function(){
+    closeSafe(); sfx.wrong(); buzz(40);
+    setMsg("Сейф заперт. Улика снова под замком.", "good");
+    window.scrollTo({top: 0, behavior: reduce ? "auto" : "smooth"});
+  });
+  if (state.safe) openSafe(true);
+
+  /* арест */
+  $("arrestBtn").addEventListener("click", function(){
+    sfx.arrest(); buzz([120,80,120,80,240]);
+    $("arrest").hidden = false; $("toAward").focus();
+  });
+  $("toAward").addEventListener("click", function(){ $("arrest").hidden = true; location.hash = "award"; sfx.fanfare(); });
+
+  /* ===== Награда: фисташковый салют ===== */
+  var cv = $("confetti"), raf = 0;
+  function confetti(){
+    if (reduce || !cv.getContext) return;
+    var ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.hidden = false; cv.width = innerWidth*dpr; cv.height = innerHeight*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var cols = ["#B9C995","#C8A77D","#BD5148","#F5EEDC","#382C29"], parts = [];
+    for (var i=0;i<110;i++) parts.push({x:Math.random()*innerWidth, y:-20-Math.random()*innerHeight*.6, vx:(Math.random()-.5)*1.6, vy:2+Math.random()*3, r:Math.random()*6.3, vr:(Math.random()-.5)*.2, s:5+Math.random()*7, pist:Math.random()<.4, c:cols[i%cols.length]});
+    var t0 = performance.now(); cancelAnimationFrame(raf);
+    (function frame(t){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      parts.forEach(function(p){
+        p.x += p.vx; p.y += p.vy; p.r += p.vr; p.vx += Math.sin((t+p.s*90)/400)*.03;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+        if (p.pist){
+          ctx.fillStyle = "#C8A77D"; ctx.beginPath(); ctx.ellipse(0,0,p.s*1.1,p.s*.75,0,0,6.3); ctx.fill();
+          ctx.fillStyle = "#9DB46B"; ctx.beginPath(); ctx.ellipse(p.s*.15,0,p.s*.65,p.s*.45,0,0,6.3); ctx.fill();
+        } else { ctx.fillStyle = p.c; ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); }
+        ctx.restore();
+      });
+      if (t - t0 < 4500) raf = requestAnimationFrame(frame); else { ctx.clearRect(0,0,innerWidth,innerHeight); cv.hidden = true; }
+    })(t0);
+  }
+  $("cheerBtn").addEventListener("click", function(){ sfx.fanfare(); buzz(60); confetti(); });
+  $("resetBtn").addEventListener("click", function(){
+    state = {tokens:[false,false,false], safe:false}; save();
+    closeSafe(); drawTokens();
+    typed = false; if (location.hash === "#start") show(); else location.hash = "start";
+  });
+
+  show();
+})();
+</script>

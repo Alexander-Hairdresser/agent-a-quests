@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#382C29">
+<title>Агентство А.</title>
+<style>
+:root{--pist:#B9C995;--pist-deep:#5F6F3A;--cream:#F5EEDC;--paper-line:#E7DCC2;--choc:#382C29;--kraft:#C8A77D;--red:#BD5148;--ink-soft:#6E5C53;
+--f-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;--f-display:"Arial Black","Helvetica Neue",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--choc);font-family:var(--f-body);line-height:1.45;
+background-image:linear-gradient(var(--paper-line) 1px,transparent 1px),linear-gradient(90deg,var(--paper-line) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--pist-deep);font-weight:700}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(32px,10vw,46px);line-height:1;margin:0}
+p{margin:0;color:var(--ink-soft)}
+img{display:block;width:100%;height:auto;max-width:100%;transform:rotate(-1.5deg);filter:drop-shadow(0 6px 10px rgba(56,44,41,.22))}
+.case{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px;border-radius:14px;text-decoration:none;color:var(--choc);background:#FFFBF1;border:2px solid var(--choc);box-shadow:0 5px 0 var(--kraft)}
+.case b{font-family:var(--f-display);font-size:19px;display:block}
+.case small{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.case .go{font-family:var(--f-display);font-size:14px;background:var(--pist);padding:10px 12px;border-radius:10px;white-space:nowrap}
+.case.soon{opacity:.55;box-shadow:none;border-style:dashed}
+a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Архив · только для своих</div>
+  <h1>Агентство А.</h1>
+  <img src="assets/agent-secret.webp" width="560" height="382" alt="Агент А. прикладывает палец к губам: «Это секретно»">
+  <p>Семейные детективные расследования для кухонного стола. Бумажная игра, а телефон подсказывает.</p>
+  <a class="case" href="case-001/#start"><span><small>Дело № 001</small><b>Фисташковый след</b></span><span class="go">Открыть</span></a>
+  <div class="case soon"><span><small>Дело № 002</small><b>Засекречено</b></span><span class="go">Скоро</span></div>
+</div>
+</body>
+</html>
