@@ -78,7 +78,7 @@ h2{font-size:clamp(24px,7vw,32px)}
 
 /* видеослот */
 .vslot{display:flex;flex-direction:column;gap:10px}
-.vslot video{width:100%;max-width:100%;border-radius:12px;background:var(--choc-3);aspect-ratio:9/16;max-height:70vh;object-fit:contain}
+.vslot video{width:100%;max-width:100%;border-radius:12px;background:var(--choc-3);aspect-ratio:1/1;max-height:70vh;object-fit:contain}
 .vlabel{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;gap:8px;align-items:center}
 .vlabel .dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:blink 1.4s steps(1) infinite}
 .letter{background:#FFFBF1;border:1px solid var(--paper-line);border-radius:4px 14px 14px 14px;padding:16px 18px;font-family:var(--f-letter);font-size:17px;line-height:1.55;color:var(--choc);box-shadow:0 2px 0 var(--paper-line)}
@@ -335,7 +335,7 @@ h2{font-size:clamp(24px,7vw,32px)}
           <figcaption>Подозреваемый<b>засекречено</b></figcaption>
         </figure>
       </div>
-      <div class="vslot" data-video="video/agent-hello.mp4">
+      <div class="vslot" data-video="video/agent-hello.mp4" data-poster="video/agent-hello.jpg">
         <div class="vlabel"><span class="dot"></span><span class="vstatus">Текстовая расшифровка сообщения</span></div>
         <video playsinline controls preload="metadata" hidden></video>
         <div class="letter fallback">
@@ -594,7 +594,7 @@ h2{font-size:clamp(24px,7vw,32px)}
         <div class="sig">Агент А.</div>
       </div>
 
-      <div class="vslot" data-video="video/agent-final.mp4">
+      <div class="vslot" data-video="video/agent-final.mp4" data-poster="video/agent-final.jpg">
         <div class="vlabel"><span class="dot"></span><span class="vstatus">Текстовая расшифровка сообщения</span></div>
         <video playsinline controls preload="metadata" hidden></video>
         <div class="letter fallback">
@@ -768,6 +768,7 @@ h2{font-size:clamp(24px,7vw,32px)}
       v.hidden = false; fb.hidden = true; st.textContent = "Видеосообщение агента А.";
     });
     v.addEventListener("error", function(){ v.hidden = true; fb.hidden = false; }, true);
+    if (slot.getAttribute("data-poster")) v.poster = slot.getAttribute("data-poster");
     try { v.src = slot.getAttribute("data-video"); } catch(e){}
   });
 
