@@ -264,6 +264,14 @@ h2{font-size:clamp(24px,7vw,32px)}
 .qcount i{width:30px;height:30px;border-radius:50%;border:3px solid var(--choc);background:#FFFBF1;transition:background .3s}
 .qcount i.on{background:var(--pist)}
 .btn:disabled{opacity:.45;box-shadow:none}
+.isteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.isteps li{position:relative;display:flex;align-items:center;gap:14px;background:#FFFBF1;border:2px solid var(--choc);border-radius:14px;padding:12px 14px 12px 12px}
+.isteps .n{position:absolute;top:-9px;left:-7px;width:26px;height:26px;border-radius:50%;background:var(--choc);color:var(--cream);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:14px}
+.isteps li.help{background:rgba(185,201,149,.35)}
+.isteps li.help .n{background:var(--red)}
+.isteps .ic{flex:none;width:64px;height:64px;color:var(--choc)}
+.isteps .t{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:15px;color:var(--ink-soft);line-height:1.3}
+.isteps .t b{font-family:var(--f-display);font-weight:900;font-size:17px;color:var(--choc);line-height:1.15}
 .scanbar{display:flex;flex-direction:column;gap:6px}
 .scanbar div{height:14px;border-radius:8px;background:var(--choc);overflow:hidden;position:relative}
 .scanbar div::after{content:"";position:absolute;inset:0;width:0;background:var(--pist);transition:width 1.6s linear}
@@ -289,6 +297,7 @@ h2{font-size:clamp(24px,7vw,32px)}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <symbol id="k-box" viewBox="0 0 64 64"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M4 34h28v24H4z M4 34l6-8h28l-6 8 M32 58l6-8V26"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M10 40h6v6h-6z M20 40h6v6h-6z M10 50h6v4"/><rect x="46" y="4" width="14" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 4" d="M46 24L32 36"/></symbol><symbol id="k-envelopes" viewBox="0 0 64 64"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 10h40v26H14z M14 10l20 15 20-15"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M8 22h40v28H8z M8 22l20 15 20-15"/><text x="28" y="60" text-anchor="middle" font-family="monospace" font-weight="700" font-size="10" fill="currentColor">01→04</text></symbol><symbol id="k-look" viewBox="0 0 64 64"><rect x="6" y="6" width="38" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M10 38l10-12 8 8 6-6 8 10"/><circle cx="34" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="44" cy="44" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M51 51l8 8"/></symbol><symbol id="k-scan" viewBox="0 0 64 64"><rect x="18" y="4" width="30" height="56" rx="5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M26 14h6v6h-6z M36 14h6v6h-6z M26 24h6v6h-6z M37 26h4 M36 30h6"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M25 44l6 6 11-12"/></symbol><symbol id="k-flip" viewBox="0 0 64 64"><rect x="16" y="14" width="28" height="36" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M22 24h16 M22 30h16 M22 36h10"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M50 18a18 18 0 0 1 0 28 M46 46l4 1 1-4"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M12 46a18 18 0 0 1 0-28 M16 18l-4-1-1 4"/></symbol><symbol id="k-ask" viewBox="0 0 64 64"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M6 10h30v18H18l-6 6v-6H6z"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M17 15a4 4 0 1 1 5 4v2 M22 25v.5"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M58 32H28v18h18l6 6v-6h6z"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M36 41h.5 M43 41h.5 M50 41h.5"/></symbol><symbol id="k-detector" viewBox="0 0 64 64"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M8 42a24 24 0 0 1 48 0"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 42a18 18 0 0 1 2-8 M50 42a18 18 0 0 0-2-8"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M32 42l12-14"/><circle cx="32" cy="42" r="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="20" y="50" width="24" height="9" rx="4.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="k-token" viewBox="0 0 64 64"><circle cx="26" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M20 26l12 12 M32 26L20 38"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M46 32h14 M54 26l6 6-6 6"/></symbol><symbol id="k-accuse" viewBox="0 0 64 64"><circle cx="18" cy="22" r="8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M4 56a14 14 0 0 1 28 0"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M36 6h22v24H46l-6 6v-6h-4z"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M47 11v10 M47 25.5v.5"/></symbol><symbol id="k-safe" viewBox="0 0 64 64"><rect x="6" y="8" width="52" height="44" rx="5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="30" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M30 20v4 M30 36v4 M20 30h4 M36 30h4 M48 24v12 M12 52v4 M52 52v4"/></symbol><symbol id="k-gift" viewBox="0 0 64 64"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M8 26h48v10H8z M12 36h40v22H12z M32 26v32"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M32 26c-4-10-16-12-14-4 2 5 14 4 14 4z M32 26c4-10 16-12 14-4-2 5-14 4-14 4z"/></symbol><symbol id="k-help" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M15 15l10 10 M49 15L39 25 M15 49l10-10 M49 49L39 39"/></symbol>
     <symbol id="i-pist" viewBox="0 0 40 40">
       <path d="M9 24c-3-9 4-18 13-18s14 8 10 17c-3 8-10 11-15 10C13 32 10 29 9 24z" fill="#C8A77D" stroke="#382C29" stroke-width="2"/>
       <path d="M14 22c0-6 4-11 9-11 4 0 7 4 6 9-1 6-5 9-9 9-4 0-6-3-6-7z" fill="#9DB46B" stroke="#382C29" stroke-width="1.5"/>
@@ -351,7 +360,33 @@ h2{font-size:clamp(24px,7vw,32px)}
         <svg width="40" height="40" aria-hidden="true"><use href="#i-pist"/></svg>
         <p><b>Маршрут расследования.</b> Кухня, гостиная, прихожая, кабинет следователя. В каждой комнате ищи на поле QR-код. Начинай с кухни.</p>
       </div>
+      <a class="btn btn-ghost" href="#rules">Правила игры</a>
       <a class="btn btn-main" href="#kitchen">Начать: кухня</a>
+    </section>
+
+    <!-- 1б. ПРАВИЛА -->
+    <section class="screen" id="s-rules" data-route="rules" aria-labelledby="h-rules">
+      <div class="title-block">
+        <div class="eyebrow">Агентство А. · Дело № 001</div>
+        <h1 id="h-rules">Как играть</h1>
+        <p class="lead">Десять шагов, и дело раскрыто.</p>
+      </div>
+      <ol class="isteps">
+        <li><span class="n">1</span><svg class="ic" aria-hidden="true"><use href="#k-box"/></svg><span class="t"><b>Сканируй QR на коробке.</b>Агент А. расскажет о деле.</span></li>
+        <li><span class="n">2</span><svg class="ic" aria-hidden="true"><use href="#k-envelopes"/></svg><span class="t"><b>Открывай конверты по порядку.</b>01, потом 02, 03, 04.</span></li>
+        <li><span class="n">3</span><svg class="ic" aria-hidden="true"><use href="#k-look"/></svg><span class="t"><b>Рассмотри картинку комнаты.</b>Ищи улики глазами.</span></li>
+        <li><span class="n">4</span><svg class="ic" aria-hidden="true"><use href="#k-scan"/></svg><span class="t"><b>Сканируй QR на карточке.</b>Выполни задание в телефоне.</span></li>
+        <li><span class="n">5</span><svg class="ic" aria-hidden="true"><use href="#k-flip"/></svg><span class="t"><b>Переверни карточку.</b>Там вывод и следующий шаг.</span></li>
+        <li><span class="n">6</span><svg class="ic" aria-hidden="true"><use href="#k-ask"/></svg><span class="t"><b>Допрос: спроси и выслушай.</b>В гостиной и в кабинете.</span></li>
+        <li><span class="n">7</span><svg class="ic" aria-hidden="true"><use href="#k-detector"/></svg><span class="t"><b>Жми кнопку детектора.</b>После каждого ответа.</span></li>
+        <li><span class="n">8</span><svg class="ic" aria-hidden="true"><use href="#k-token"/></svg><span class="t"><b>Жетон хитрости.</b>Сдан жетон, вопрос без ответа.</span></li>
+        <li><span class="n">9</span><svg class="ic" aria-hidden="true"><use href="#k-accuse"/></svg><span class="t"><b>Всё ясно? Обвиняй!</b>Арестуй главного подозреваемого.</span></li>
+        <li><span class="n">10</span><svg class="ic" aria-hidden="true"><use href="#k-safe"/></svg><span class="t"><b>Открой сейф.</b>Три фразы от отговорки до признания.</span></li>
+        <li class="help"><span class="n">?</span><svg class="ic" aria-hidden="true"><use href="#k-help"/></svg><span class="t"><b>Застряла?</b>Жми «Агент, помоги».</span></li>
+      </ol>
+      <p class="note" style="text-align:center">Детектор шуточный. Последнее слово за следователем.</p>
+      <a class="btn btn-main" href="#kitchen">Начать: кухня</a>
+      <a class="btn btn-ghost" href="#start">Назад к агенту</a>
     </section>
 
     <!-- 2. КУХНЯ -->
@@ -728,7 +763,7 @@ h2{font-size:clamp(24px,7vw,32px)}
   function buzz(p){ try { if (navigator.vibrate) navigator.vibrate(p); } catch(e){} }
 
   /* ===== Маршруты ===== */
-  var routes = ["start","kitchen","alibi","steps","detector","safe","award"];
+  var routes = ["start","rules","kitchen","alibi","steps","detector","safe","award"];
   var typed = false;
   function show(){
     var r = (location.hash || "").replace("#","");
