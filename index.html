@@ -9,6 +9,7 @@
 :root{--pist:#B9C995;--pist-deep:#5F6F3A;--cream:#F5EEDC;--paper-line:#E7DCC2;--choc:#382C29;--kraft:#C8A77D;--red:#BD5148;--ink-soft:#6E5C53;
 --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;--f-display:"Arial Black","Helvetica Neue",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--cream);color:var(--choc);font-family:var(--f-body);line-height:1.45;
 background-image:linear-gradient(var(--paper-line) 1px,transparent 1px),linear-gradient(90deg,var(--paper-line) 1px,transparent 1px);background-size:24px 24px}
 .wrap{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px;display:flex;flex-direction:column;gap:18px}
@@ -21,6 +22,13 @@ img{display:block;width:100%;height:auto;max-width:100%;transform:rotate(-1.5deg
 .case small{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
 .case .go{font-family:var(--f-display);font-size:14px;background:var(--pist);padding:10px 12px;border-radius:10px;white-space:nowrap}
 .case.soon{opacity:.55;box-shadow:none;border-style:dashed}
+.contact{display:flex;flex-direction:column;gap:12px;padding:18px 16px;border-radius:14px;background:var(--choc);color:var(--cream);box-shadow:0 5px 0 var(--kraft)}
+.contact .eyebrow{color:var(--pist)}
+.contact b{font-family:var(--f-display);font-size:22px;line-height:1.1}
+.contact p{color:#E4D8C2}
+.contact .links{display:flex;flex-wrap:wrap;gap:10px}
+.contact a{flex:1 1 140px;text-align:center;text-decoration:none;font-family:var(--f-display);font-size:15px;color:var(--choc);background:var(--pist);padding:13px 14px;border-radius:10px}
+.contact a:active{transform:translateY(2px)}
 a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 </style>
 </head>
@@ -32,6 +40,29 @@ a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
   <p>Семейные детективные расследования для кухонного стола. Бумажная игра, а телефон подсказывает.</p>
   <a class="case" href="case-001/#start"><span><small>Дело № 001</small><b>Фисташковый след</b></span><span class="go">Открыть</span></a>
   <div class="case soon"><span><small>Дело № 002</small><b>Засекречено</b></span><span class="go">Скоро</span></div>
+  <div class="contact" id="contact" hidden>
+    <div class="eyebrow">Прямая связь</div>
+    <b>Написать Агенту А.</b>
+    <p>Агент на связи. Расскажи, как раскрыла дело, задай вопрос или попроси следующее задание.</p>
+    <div class="links" id="contactLinks"></div>
+  </div>
 </div>
+<script>
+/* Каналы связи с Агентом А. Пустой адрес не показывается. */
+var CONTACTS = [
+  {name: "Телеграм", href: ""},
+  {name: "Max", href: ""}
+];
+(function(){
+  var box = document.getElementById("contactLinks"), n = 0;
+  CONTACTS.forEach(function(c){
+    if (!c.href) return;
+    var a = document.createElement("a");
+    a.href = c.href; a.target = "_blank"; a.rel = "noopener"; a.textContent = c.name;
+    box.appendChild(a); n++;
+  });
+  if (n) document.getElementById("contact").hidden = false;
+})();
+</script>
 </body>
 </html>
